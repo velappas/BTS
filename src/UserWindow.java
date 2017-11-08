@@ -8,6 +8,10 @@ import javax.swing.*;
 public class UserWindow {
 	//need to get this to github
 	
+	public UserWindow(){
+		
+	}
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
