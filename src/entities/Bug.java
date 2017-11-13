@@ -29,6 +29,23 @@ public class Bug
 		assigned_developer = -1;	//Set the developer ID to be a non-existent ID so that you can tell if the bug is assigned yet
 	}
 	
+	//Constructor of a bug for reading out of the database
+	//@param ID - ID of 'this'
+	//@param description - description of 'this'
+	//@param prodID - ID of the product associated with 'this'
+	//@param stat - status of 'this'
+	//@param dat - submission Date of 'this'
+	//@param assDev - ID of the developer assigned to 'this'
+	public Bug(int ID, String description, int prodID, String stat, Date dat, int assDev)
+	{
+		bugID = ID;
+		bug_description = description;
+		productID = prodID;
+		status = stat;
+		date_submitted = dat;
+		assigned_developer = assDev;
+	}
+	
 	//Can set the status of 'this' Bug
 	//@param newStat - the new status to be set
 	public void setStatus(String newStat)
@@ -72,5 +89,13 @@ public class Bug
 	public Date getSubmissionDate()
 	{
 		return date_submitted;
+	}
+	
+	@Override
+	//This method allows for consistent formatting when writing bugs to the database
+	//@return - A String representation of 'this' bug
+	public String toString()
+	{
+		return bugID + " " + bug_description + " " + productID + " " + status + " " + date_submitted + " " + assigned_developer;
 	}
 }
