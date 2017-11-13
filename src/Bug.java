@@ -1,6 +1,7 @@
 //class Bug
 //An entity class to store information about a bug in a product
 //@author Evan Hampton
+//Date: Nov. 13, 2017
 
 import java.util.Date;
 
