@@ -3,6 +3,7 @@
 //@author Evan Hampton
 //Date: Nov. 13, 2017
 
+package entities;
 import java.util.Date;
 
 public class Bug 
@@ -65,5 +66,11 @@ public class Bug
 	public int getProduct()
 	{
 		return productID;
+	}
+	
+	//@return - the submission Date of 'this' Bug
+	public Date getSubmissionDate()
+	{
+		return date_submitted;
 	}
 }
