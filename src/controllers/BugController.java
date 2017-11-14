@@ -55,7 +55,7 @@ public class BugController
 				break;
 			
 			if(Integer.parseInt(tString.split(", ")[0]) == bug_ID)	//Check if the ID in the database matches the input
-				found = true;										//If it matches, don't copy the line to the temporary file
+				found = true;										//If it matches, don't copy the line to the temporary vector
 			else
 				lines.add(tString);
 		}
@@ -76,7 +76,7 @@ public class BugController
 	}
 	
 	//This function scans the Bug database and returns a list of all bugs
-	//@return - Returns a vector containing objects of all bugs in the database
+	//@return - Returns a vector containing objects of all bugs in the database, or null if nothing found
 	//@throws FileNotFoundException - if the database pathname could not be found
 	//@throws IOException - if an IO error occurs while reading from the database
 	public Vector<Bug> browseAllBugs() throws FileNotFoundException, IOException
@@ -95,9 +95,12 @@ public class BugController
 			String arr[] = temp.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
 			toReturn.add(new Bug(Integer.parseInt(arr[0]), arr[1], Integer.parseInt(arr[2]), arr[3], date.parse(arr[4], new ParsePosition(0)), Integer.parseInt(arr[5])));
 		}
-		
 		fr.close();
-		return toReturn;
+		
+		if(toReturn.size() == 0)
+			return null;
+		else
+			return toReturn;
 	}
 	
 	//Browse bugs pertaining to a specific product

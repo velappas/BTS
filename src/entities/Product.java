@@ -19,6 +19,15 @@ public class Product
    		product_id = IDCount++;
    	}
    	
+   	//Constructor for a Product to simplify "database" access
+   	//@param ID - the ID of 'this' product
+   	//@param namein - the name of 'this' product
+   	public Product(int ID, String namein)
+   	{
+   		product_id = ID;
+   		name = namein;
+   	}
+   	
    	//@return - this.product_id
    	public int getProductID()
    	{
