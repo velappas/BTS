@@ -30,4 +30,13 @@ public class Product
    	{
    		return name;
    	}
+   	
+   	@Override
+	//This method allows for consistent formatting when writing products to the database
+	//The format of the string returned is "product_id name"
+	//@return - A String representation of 'this' Product
+	public String toString()
+	{
+		return product_id + ", " + name;
+	}
 }
