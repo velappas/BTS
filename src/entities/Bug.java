@@ -4,6 +4,7 @@
 //Date: Nov. 13, 2017
 
 package entities;
+
 import java.util.Date;
 
 public class Bug 
@@ -14,7 +15,7 @@ public class Bug
 	private String status;
 	private Date date_submitted;
 	private int assigned_developer;
-	private static int IDCount = 0;	//TODO: This will need to be changed so that, if the system is rebooted, it initializes to a saved amount.
+	private static int IDCount;	//TODO: IDCount will need to be initialized each time the system is booted.
 	
 	//Constructor of a Bug
 	//@param description - Description of a bug in a product
