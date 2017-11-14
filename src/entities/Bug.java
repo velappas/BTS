@@ -14,7 +14,7 @@ public class Bug
 	private String status;
 	private Date date_submitted;
 	private int assigned_developer;
-	private static int IDCount;
+	private static int IDCount = 0;	//TODO: This will need to be changed so that, if the system is rebooted, it initializes to a saved amount.
 	
 	//Constructor of a Bug
 	//@param description - Description of a bug in a product
@@ -93,9 +93,10 @@ public class Bug
 	
 	@Override
 	//This method allows for consistent formatting when writing bugs to the database
+	//The format of the string returned is "bugID bug_description productID status date_submitted assigned_developer"
 	//@return - A String representation of 'this' bug
 	public String toString()
 	{
-		return bugID + " " + bug_description + " " + productID + " " + status + " " + date_submitted + " " + assigned_developer;
+		return bugID + ", " + bug_description + ", " + productID + ", " + status + ", " + date_submitted + ", " + assigned_developer;
 	}
 }
