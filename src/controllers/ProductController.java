@@ -1,5 +1,7 @@
 //class ProductController
 //This class allows for management of products in the database
+//@author Luke Elliott
+//@author Victoria Lappas
 //@author Evan Hampton
 //Date: Nov. 13, 2017
 

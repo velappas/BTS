@@ -1,9 +1,9 @@
 //class EmployeeController
 //This class allows for management of employees in the database
+//@author Luke Elliott
+//@author Victoria Lappas
 //@author Evan Hampton
 //Date: Nov. 13, 2017
-
-//TODO: Finish this class
 
 package controllers;
 
@@ -144,6 +144,53 @@ public class EmployeeController
 
 			fw.close();
 			
+			return found;
+		}
+		
+		//Updates the status of a specific employee in the database
+		//@param employeeID - ID of the employee to modify
+		//@param newName - new name of the employee in the database
+		//@param newPass - new password of the employee in the database
+		//@return - false if employee with ID employeeID not found, otherwise true
+		//@throws FileNotFoundException - if the database pathname could not be found
+		//@throws IOException - if an IO error occurs while reading from the database
+		public boolean updateEmployeeNameAndPass(int employeeID, String newName, String newPass) throws FileNotFoundException, IOException
+		{
+			boolean found = false;
+			File currentEmployees = new File("CurrentEmployees.txt");
+			BufferedReader fr = new BufferedReader(new FileReader(currentEmployees));
+			Vector<String> lines = new Vector<String>();
+					
+			while(true)
+			{
+				String tString = fr.readLine();	//Read a line from the database
+						
+				if(tString == null)
+					break;
+						
+				if(Integer.parseInt(tString.split(", ")[0]) == employeeID)	//Check if the ID in the database matches the input
+				{
+					found = true;
+					String arr[] = tString.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
+					Employee temp = new Employee(Integer.parseInt(arr[0]), arr[1], newName, newPass);
+					lines.add(temp.toString());	//Add the edited employee.
+				}
+				else
+					lines.add(tString);
+			}
+			fr.close();			
+					
+			BufferedWriter fw = new BufferedWriter(new FileWriter(currentEmployees, false));	//Make sure to write at the very beginning of the file.
+					
+			for(int i = 0; i < lines.size(); i++)	//Write all of the stored lines.
+			{
+				fw.write(lines.elementAt(i));
+				fw.newLine();
+				fw.flush();
+			}
+
+			fw.close();
+					
 			return found;
 		}
 }

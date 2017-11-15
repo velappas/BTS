@@ -1,5 +1,7 @@
 //class Bug
 //An entity class to store information about a bug in a product
+//@author Luke Elliott
+//@author Victoria Lappas
 //@author Evan Hampton
 //Date: Nov. 13, 2017
 

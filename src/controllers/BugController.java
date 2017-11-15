@@ -1,5 +1,7 @@
 //class BugController
 //A controller class to communicate with the 'database' and manage bugs in the system
+//@author Luke Elliott
+//@author Victoria Lappas
 //@author Evan Hampton
 //Date: Nov. 13, 2017
 

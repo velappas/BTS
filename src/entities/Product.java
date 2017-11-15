@@ -1,5 +1,7 @@
 //class Product
 //This class is an entity class for storing information about a software product in the system
+//@author Luke Elliott
+//@author Victoria Lappas
 //@author Evan Hampton
 //Date: Nov. 13, 2017
 

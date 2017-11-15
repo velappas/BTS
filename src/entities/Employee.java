@@ -1,5 +1,9 @@
 //class Employee
 //An entity class for storing information about an employee in the system
+//@author Luke Elliott
+//@author Victoria Lappas
+//@author Evan Hampton
+//Date: Nov. 14, 2017
 
 //TODO: Finish this class
 
@@ -36,6 +40,24 @@ public class Employee
     	employee_type = type;
     	name = nam;
     	password = pass;
+    }
+    
+    //@return - this.employee_type
+    public String getEmployeeType()
+    {
+    	return employee_type;
+    }
+    
+    //@return - this.name
+    public String getName()
+    {
+    	return name;
+    }
+    
+    //@return - this.password
+    public String getPassword()
+    {
+    	return password;
     }
     
     @Override
