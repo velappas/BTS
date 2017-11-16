@@ -169,7 +169,6 @@ public class UserWindow{
 	
 	public static void main(String[] args) {
 		UserWindow userWindow = new UserWindow();
-
 	}
 
 }
