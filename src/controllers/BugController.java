@@ -29,7 +29,7 @@ public class BugController
 	public void submitBug(String bug_description, int product_ID) throws IOException
 	{
 		Bug toSub = new Bug(bug_description, product_ID);
-		BufferedWriter fw = new BufferedWriter(new FileWriter("CurrentBugs.txt", true));	//TODO: Hard coded in. Could change.
+		BufferedWriter fw = new BufferedWriter(new FileWriter("data/CurrentBugs.txt", true));	//TODO: Hard coded in. Could change.
 		fw.write(toSub.toString());	//Write with toString method for consistency
 		fw.newLine();
 		fw.flush();
@@ -45,7 +45,7 @@ public class BugController
 	public boolean removeBug(int bug_ID) throws FileNotFoundException, IOException
 	{
 		boolean found = false;
-		File currentBugs = new File("CurrentBugs.txt");
+		File currentBugs = new File("data/CurrentBugs.txt");
 		BufferedReader fr = new BufferedReader(new FileReader(currentBugs));
 		Vector<String> lines = new Vector<String>();
 		
@@ -83,7 +83,7 @@ public class BugController
 	//@throws IOException - if an IO error occurs while reading from the database
 	public Vector<Bug> browseAllBugs() throws FileNotFoundException, IOException
 	{
-		BufferedReader fr = new BufferedReader(new FileReader("CurrentBugs.txt"));
+		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentBugs.txt"));
 		
 		Vector<Bug> toReturn = new Vector<Bug>();
 		while(true)
@@ -113,7 +113,7 @@ public class BugController
 	public Vector<Bug> browseProductBugs(int product_ID) throws FileNotFoundException, IOException
 	{
 		Vector<Bug> toReturn = new Vector<Bug>();
-		BufferedReader fr = new BufferedReader(new FileReader("CurrentBugs.txt"));
+		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentBugs.txt"));
 		
 		while(true)
 		{
@@ -146,7 +146,7 @@ public class BugController
 	Vector<Bug> browseAssignedBugs(int developer_id) throws FileNotFoundException, IOException
 	{
 		Vector<Bug> toReturn = new Vector<Bug>();
-		BufferedReader fr = new BufferedReader(new FileReader("CurrentBugs.txt"));
+		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentBugs.txt"));
 		
 		while(true)
 		{
@@ -181,7 +181,7 @@ public class BugController
 	boolean assignDeveloper(int bug_id, int developer_id) throws FileNotFoundException, IOException
 	{
 		boolean found = false;
-		File currentBugs = new File("CurrentBugs.txt");
+		File currentBugs = new File("data/CurrentBugs.txt");
 		BufferedReader fr = new BufferedReader(new FileReader(currentBugs));
 		Vector<String> lines = new Vector<String>();
 		
@@ -228,7 +228,7 @@ public class BugController
 	public boolean updateBugState(int bugID, String status) throws FileNotFoundException, IOException
 	{
 		boolean found = false;
-		File currentBugs = new File("CurrentBugs.txt");
+		File currentBugs = new File("data/CurrentBugs.txt");
 		BufferedReader fr = new BufferedReader(new FileReader(currentBugs));
 		Vector<String> lines = new Vector<String>();
 		
