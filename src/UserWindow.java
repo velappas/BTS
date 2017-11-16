@@ -6,12 +6,16 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import controllers.*; //Our controller classes
 
 import javax.swing.*;
 
 public class UserWindow{
 	private JFrame userFrame;
 	private JTabbedPane tabbedPane;
+	private BugController bugController;
 
 	public UserWindow(){
 		//build user window using gui components
@@ -22,6 +26,8 @@ public class UserWindow{
 		userFrame.setLocationRelativeTo(null);
 		
 		tabbedPane = new JTabbedPane();
+		
+		bugController = new BugController();
 
 		createBrowseBugScreen();
 		createSubmitBugScreen();
@@ -89,7 +95,12 @@ public class UserWindow{
 		
 		submitButton.addActionListener(new ActionListener(){ //Submit button listener implemented with an anonymous inner class
 			public void actionPerformed(ActionEvent e){
-				System.out.println("test");
+				try{
+					bugController.submitBug(descriptionField.getText(), productList.getSelectedIndex());
+				}catch(IOException ioe){
+					JOptionPane.showMessageDialog(userFrame, "Error adding bug to the database.");
+				}
+
 			}
 		});
 		
