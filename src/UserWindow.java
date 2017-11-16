@@ -4,6 +4,9 @@
  */
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -64,6 +67,21 @@ public class UserWindow{
 			}
 		
 			JList<Bug> bugList = new JList<Bug>(listModel);
+			
+			productList.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent a)
+				{
+					try
+					{
+						bugList.setListData(bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+					}
+					catch(IOException b)
+					{
+						b.printStackTrace();
+					}
+				}
+			}
+					);
 		
 			bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			bugList.setLayoutOrientation(JList.VERTICAL);
