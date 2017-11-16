@@ -3,7 +3,6 @@
  * @author Victoria Lappas
  */
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -94,27 +93,26 @@ public class UserWindow{
 			bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 			bugList.setLayoutOrientation(JList.VERTICAL);
 			JScrollPane bugListScroller = new JScrollPane(bugList);
-			bugListScroller.setPreferredSize(new Dimension(250,80));
 		
 			selectProductLabel.setBounds(80,30,150,30);
 			productList.setBounds(210,30,250,30);
 			bugLabel.setBounds(90,60,150,30);
-			bugList.setBounds(90,90,400,200);
+			bugListScroller.setBounds(90,90,400,200);
 		
 			browseBugsPanel.add(selectProductLabel);
 			browseBugsPanel.add(productList);
 			browseBugsPanel.add(bugLabel);
-			browseBugsPanel.add(bugList);
+			browseBugsPanel.add(bugListScroller);
 		
 			tabbedPane.addTab("Browse Bugs", browseBugsPanel);
 		}
+			
 		catch(IOException a)
 		{
 			JOptionPane err = new JOptionPane("Issue reading from database.", JOptionPane.ERROR_MESSAGE);
 		}
 		
 	}
-	
 	
 	
 	//submit bug screen
@@ -129,6 +127,7 @@ public class UserWindow{
 		String [] productStringArray = {"Sample Product 1", "Sample Product 2"};
 		JComboBox<String> productList = new JComboBox<String>(productStringArray);
 		productList.setSelectedIndex(0);
+		
 		JButton submitButton = new JButton("Submit");
 		
 		description.setBounds(100,80,150,30);
