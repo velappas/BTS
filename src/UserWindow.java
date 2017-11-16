@@ -20,8 +20,8 @@ import entities.Product;
 public class UserWindow{
 	private JFrame userFrame;
 	private JTabbedPane tabbedPane;
-	private BugController bugC;
-	private ProductController prodC;
+	private BugController bugController;
+	private ProductController prodController;
 	
 	public UserWindow(){
 		//build user window using gui components
