@@ -60,10 +60,14 @@ public class UserWindow{
 			JLabel bugLabel = new JLabel("Current Bugs ");
 		
 			Vector<Bug> bugVector = bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
+				
 			DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
-		
-			for(int i = 0; i < bugVector.size(); i++) {
-				listModel.addElement(bugVector.get(i));
+			
+			if(bugVector != null)
+			{
+				for(int i = 0; i < bugVector.size(); i++) {
+					listModel.addElement(bugVector.get(i));
+				}
 			}
 		
 			JList<Bug> bugList = new JList<Bug>(listModel);
@@ -73,7 +77,11 @@ public class UserWindow{
 				{
 					try
 					{
-						bugList.setListData(bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+						Vector<Bug> temp = bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
+						if(temp != null)
+							bugList.setListData(bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+						else
+							bugList.setListData(new Vector<Bug>()); //Just put in an empty vector
 					}
 					catch(IOException b)
 					{
