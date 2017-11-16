@@ -25,7 +25,7 @@ public class ProductController
 	public void createProduct(String name) throws IOException
 	{
 		Product toSub = new Product(name);
-		BufferedWriter fw = new BufferedWriter(new FileWriter("CurrentProducts.txt", true));	//TODO: Hard coded in. Could change.
+		BufferedWriter fw = new BufferedWriter(new FileWriter("data/CurrentProducts.txt", true));	//TODO: Hard coded in. Could change.
 		fw.write(toSub.toString());	//Write with toString method for consistency
 		fw.newLine();
 		fw.flush();
@@ -41,7 +41,7 @@ public class ProductController
 	public boolean removeProduct(int productID) throws FileNotFoundException, IOException
 	{
 		boolean found = false;
-		File currentProducts = new File("CurrentProducts.txt");
+		File currentProducts = new File("data/CurrentProducts.txt");
 		BufferedReader fr = new BufferedReader(new FileReader(currentProducts));
 		Vector<String> lines = new Vector<String>();
 		
@@ -79,7 +79,7 @@ public class ProductController
 	//@throws IOException - if an IO error occurs while reading from the database
 	public Vector<Product> browseAllProducts() throws FileNotFoundException, IOException
 	{
-		BufferedReader fr = new BufferedReader(new FileReader("CurrentProducts.txt"));
+		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentProducts.txt"));
 		
 		Vector<Product> toReturn = new Vector<Product>();
 		while(true)

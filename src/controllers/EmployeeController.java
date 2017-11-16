@@ -26,7 +26,7 @@ public class EmployeeController
 	public void createEmployee(String name, String password, String employee_type) throws FileNotFoundException, IOException
 	{
 		Employee toSub = new Employee(employee_type, name, password);
-		BufferedWriter fw = new BufferedWriter(new FileWriter("CurrentEmployees.txt", true));	//TODO: Hard coded in. Could change.
+		BufferedWriter fw = new BufferedWriter(new FileWriter("data/CurrentEmployees.txt", true));	//TODO: Hard coded in. Could change.
 		fw.write(toSub.toString());	//Write with toString method for consistency
 		fw.newLine();
 		fw.flush();
@@ -42,7 +42,7 @@ public class EmployeeController
 	public boolean removeEmployee(int employee_id) throws FileNotFoundException, IOException
 	{
 		boolean found = false;
-		File currentEmployees = new File("CurrentEmployees.txt");
+		File currentEmployees = new File("data/CurrentEmployees.txt");
 		BufferedReader fr = new BufferedReader(new FileReader(currentEmployees));
 		Vector<String> lines = new Vector<String>();
 		
@@ -80,7 +80,7 @@ public class EmployeeController
 	//@throws IOException - if an IO error occurs while reading from the database
 	public Vector<Employee> getAllEmployees() throws FileNotFoundException, IOException
 	{
-		BufferedReader fr = new BufferedReader(new FileReader("CurrentEmployees.txt"));
+		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentEmployees.txt"));
 		
 		Vector<Employee> toReturn = new Vector<Employee>();
 		while(true)
@@ -110,7 +110,7 @@ public class EmployeeController
 		public boolean updateEmployeeType(int employeeID, String status) throws FileNotFoundException, IOException
 		{
 			boolean found = false;
-			File currentEmployees = new File("CurrentEmployees.txt");
+			File currentEmployees = new File("data/CurrentEmployees.txt");
 			BufferedReader fr = new BufferedReader(new FileReader(currentEmployees));
 			Vector<String> lines = new Vector<String>();
 			
@@ -157,7 +157,7 @@ public class EmployeeController
 		public boolean updateEmployeeNameAndPass(int employeeID, String newName, String newPass) throws FileNotFoundException, IOException
 		{
 			boolean found = false;
-			File currentEmployees = new File("CurrentEmployees.txt");
+			File currentEmployees = new File("data/CurrentEmployees.txt");
 			BufferedReader fr = new BufferedReader(new FileReader(currentEmployees));
 			Vector<String> lines = new Vector<String>();
 					
