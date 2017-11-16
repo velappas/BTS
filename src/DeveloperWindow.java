@@ -6,12 +6,13 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import controllers.*;
 import javax.swing.*;
 
 public class DeveloperWindow {
 	private JFrame developerFrame;
 	private JTabbedPane tabbedPane;
+	private BugController bugController;
 	
 	public DeveloperWindow() {
 		developerFrame = new JFrame();
@@ -93,6 +94,22 @@ public class DeveloperWindow {
 		String [] productStringArray = {"All bugs", "Sample Product 1", "Sample Product 2"};
 		JComboBox<String> productList = new JComboBox<String>(productStringArray);		
 		productList.setSelectedIndex(0);
+		
+		productList.addActionListener(new ActionListener(){ //Listener for determining selected product and listing related bugs
+			public void actionPerformed(ActionEvent e) {
+				JComboBox<String> combo = (JComboBox<String>) e.getSource(); //establish a reference to the JComboBox, "this" can't be used in anonymous inner classes
+		        String selectedProduct = (String) combo.getSelectedItem();
+		        if(selectedProduct.equals("All bugs"))
+		        {
+		        	//TODO list all the bugs
+		        }else{
+			        //TODO after we get the selected item, we must find the product id of the selected product and list bugs for only that product
+			        
+			        	
+		        }
+	
+			}	
+		});
 		
 		
 		browseBugsLabel.setBounds(80,20,150,30);
