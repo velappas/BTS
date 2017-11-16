@@ -104,9 +104,9 @@ public class DeveloperWindow {
 	}
 	
 	
-	public static void main(String[] args){
-		DeveloperWindow developerWindow = new DeveloperWindow();
-	}
+	//public static void main(String[] args){
+	//	DeveloperWindow developerWindow = new DeveloperWindow();
+	//}
 	
 	
 }

@@ -1,3 +1,2 @@
-
 0, employee_type, name, password
 0, employee_type, name, password
