@@ -3,7 +3,6 @@
  * @author Victoria Lappas
  */
 
-import java.awt.Dimension;
 import javax.swing.*;
 
 public class UserWindow{
@@ -11,6 +10,7 @@ public class UserWindow{
 	private JTabbedPane tabbedPane;
 
 	public UserWindow(){
+		
 		//build user window using gui components
 		userFrame = new JFrame();
 		userFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,22 +52,20 @@ public class UserWindow{
 		bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		bugList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane bugListScroller = new JScrollPane(bugList);
-		bugListScroller.setPreferredSize(new Dimension(250,80));
 		
 		selectProductLabel.setBounds(80,30,150,30);
 		productList.setBounds(210,30,250,30);
 		bugLabel.setBounds(90,60,150,30);
-		bugList.setBounds(90,90,400,200);
+		bugListScroller.setBounds(90,90,400,200);
 		
 		browseBugsPanel.add(selectProductLabel);
 		browseBugsPanel.add(productList);
 		browseBugsPanel.add(bugLabel);
-		browseBugsPanel.add(bugList);
+		browseBugsPanel.add(bugListScroller);
 		
 		tabbedPane.addTab("Browse Bugs", browseBugsPanel);
 		
 	}
-	
 	
 	
 	//submit bug screen
@@ -82,6 +80,7 @@ public class UserWindow{
 		String [] productStringArray = {"Sample Product 1", "Sample Product 2"};
 		JComboBox<String> productList = new JComboBox<String>(productStringArray);
 		productList.setSelectedIndex(0);
+		
 		JButton submitButton = new JButton("Submit");
 		
 		description.setBounds(100,80,150,30);

@@ -3,14 +3,13 @@
  * @author Victoria Lappas
  */
 
-import java.awt.Dimension;
-
 import javax.swing.*;
 
 public class DeveloperWindow {
 	private JFrame developerFrame;
 	private JTabbedPane tabbedPane;
 	
+	//Developer window constructor
 	public DeveloperWindow() {
 		developerFrame = new JFrame();
 		developerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,7 +24,6 @@ public class DeveloperWindow {
 		
 		developerFrame.add(tabbedPane);
 		developerFrame.setVisible(true);
-		
 	}
 	
 	//browse assignments screen
@@ -33,8 +31,8 @@ public class DeveloperWindow {
 		JPanel browseAssignmentsPanel = new JPanel();
 		browseAssignmentsPanel.setLayout(null);
 		
-		JLabel assignmentLabel = new JLabel("Current Assignments: ");
-		String [] assignmentStringArray = {"Assignment 1", "Assignment 2", "Assignment 3"};
+		JLabel assignmentLabel = new JLabel("Current Assigned Bugs ");
+		String [] assignmentStringArray = {"Assignment 1", "Assignment 2", "Assignment 3", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", };
 		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
 		for(int i = 0; i < assignmentStringArray.length; i++) {
@@ -45,24 +43,35 @@ public class DeveloperWindow {
 		assignmentList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		assignmentList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane assignmentListScroller = new JScrollPane(assignmentList);
-		assignmentListScroller.setPreferredSize(new Dimension(250,80));
+		
+		JRadioButton reportFixedButton = new JRadioButton("Report Fixed");
+		reportFixedButton.setSelected(true);
+		JRadioButton removeButton = new JRadioButton("Remove");
+
+		ButtonGroup group = new ButtonGroup();
+		group.add(reportFixedButton);
+		group.add(removeButton);
 		
 		JButton updateButton = new JButton("Update Bug Status");
 		
 		
 		assignmentLabel.setBounds(80,20,150,30);
-		assignmentList.setBounds(80,60,400,200);
-		updateButton.setBounds(200,300,150,30);
+		assignmentListScroller.setBounds(80,60,400,200);
+		reportFixedButton.setBounds(150,270,120,30);
+		removeButton.setBounds(300,270,120,30);
+		updateButton.setBounds(200,310,150,30);
 		
 		browseAssignmentsPanel.add(assignmentLabel);
-		browseAssignmentsPanel.add(assignmentList);
+		browseAssignmentsPanel.add(assignmentListScroller);
+		browseAssignmentsPanel.add(removeButton);
+		browseAssignmentsPanel.add(reportFixedButton);
 		browseAssignmentsPanel.add(updateButton);
 		
 		tabbedPane.addTab("Browse Assignments", browseAssignmentsPanel);
 		
 	}
 	
-	
+	//browse all bugs screen
 	public void createBrowseAllBugsScreen() {
 		JPanel browseBugsPanel = new JPanel();
 		browseBugsPanel.setLayout(null);
@@ -80,7 +89,6 @@ public class DeveloperWindow {
 		bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		bugList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane bugListScroller = new JScrollPane(bugList);
-		bugListScroller.setPreferredSize(new Dimension(250,80));
 		
 		JLabel productLabel = new JLabel("Product ");
 		String [] productStringArray = {"All bugs", "Sample Product 1", "Sample Product 2"};
@@ -89,18 +97,16 @@ public class DeveloperWindow {
 		
 		
 		browseBugsLabel.setBounds(80,20,150,30);
-		bugList.setBounds(80,60,400,200);
+		bugListScroller.setBounds(80,60,400,200);
 		productLabel.setBounds(280,20,150,30);
 		productList.setBounds(330,20,150,30);
 		
 		browseBugsPanel.add(browseBugsLabel);
-		browseBugsPanel.add(bugList);
+		browseBugsPanel.add(bugListScroller);
 		browseBugsPanel.add(productLabel);
 		browseBugsPanel.add(productList);
 		
 		tabbedPane.addTab("Browse Bugs", browseBugsPanel);
-		
-		
 	}
 	
 	
