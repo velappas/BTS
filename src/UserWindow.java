@@ -7,16 +7,22 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
-import controllers.*; //Our controller classes
+import java.util.Vector;
 
 import javax.swing.*;
+
+import controllers.BugController;
+import controllers.ProductController;
+import entities.Bug;
+import entities.Product;
+
 
 public class UserWindow{
 	private JFrame userFrame;
 	private JTabbedPane tabbedPane;
-	private BugController bugController;
-
+	private BugController bugC;
+	private ProductController prodC;
+	
 	public UserWindow(){
 		//build user window using gui components
 		userFrame = new JFrame();
