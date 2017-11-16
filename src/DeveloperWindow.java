@@ -3,13 +3,10 @@
  * @author Victoria Lappas
  */
 
-<<<<<<< HEAD
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import controllers.*;
-=======
->>>>>>> branch 'master' of https://github.com/velappas/BTS.git
 import javax.swing.*;
 
 public class DeveloperWindow {
