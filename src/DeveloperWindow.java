@@ -4,6 +4,8 @@
  */
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -49,6 +51,11 @@ public class DeveloperWindow {
 		
 		JButton updateButton = new JButton("Update Bug Status");
 		
+		updateButton.addActionListener(new ActionListener(){ //Update bug status listener implemented with an anonymous inner class
+			public void actionPerformed(ActionEvent e){
+				System.out.println("test");
+			}
+		});
 		
 		assignmentLabel.setBounds(80,20,150,30);
 		assignmentList.setBounds(80,60,400,200);

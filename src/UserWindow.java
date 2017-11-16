@@ -4,6 +4,9 @@
  */
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 
 public class UserWindow{
@@ -84,6 +87,12 @@ public class UserWindow{
 		productList.setSelectedIndex(0);
 		JButton submitButton = new JButton("Submit");
 		
+		submitButton.addActionListener(new ActionListener(){ //Submit button listener implemented with an anonymous inner class
+			public void actionPerformed(ActionEvent e){
+				System.out.println("test");
+			}
+		});
+		
 		description.setBounds(100,80,150,30);
 		descriptionField.setBounds(220,80,250,30);
 		productName.setBounds(100,130,150,30);
@@ -113,6 +122,12 @@ public class UserWindow{
 		JLabel username = new JLabel("Username:  ");
 		JLabel password = new JLabel("Password:  ");
 		JButton loginButton = new JButton("Login");
+		
+		loginButton.addActionListener(new ActionListener(){ //Login button listener implemented with an anonymous inner class
+			public void actionPerformed(ActionEvent e){
+				System.out.println("test");
+			}
+		});
 		
 		JRadioButton developerButton = new JRadioButton("Developer");
 		developerButton.setSelected(true);
