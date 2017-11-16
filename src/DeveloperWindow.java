@@ -6,7 +6,13 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Vector;
+
 import controllers.*;
+import entities.Bug;
+import entities.Product;
+
 import javax.swing.*;
 
 public class DeveloperWindow {
@@ -88,14 +94,11 @@ public class DeveloperWindow {
 		
 		JLabel browseBugsLabel = new JLabel("Browse Bugs ");
 		
-		String [] bugStringArray = {"Sample Bug 1", "Sample Bug 2", "Sample Bug 3"};
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		//TODO get list of bugs from the database
+		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
 		
-		for(int i = 0; i < bugStringArray.length; i++) {
-			listModel.addElement(bugStringArray[i]);
-		}
 		
-		JList<String> bugList = new JList<String>(listModel);
+		JList<Bug> bugList = new JList<Bug>(listModel);
 		bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		bugList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane bugListScroller = new JScrollPane(bugList);
@@ -109,14 +112,22 @@ public class DeveloperWindow {
 			public void actionPerformed(ActionEvent e) {
 				JComboBox<String> combo = (JComboBox<String>) e.getSource(); //establish a reference to the JComboBox, "this" can't be used in anonymous inner classes
 		        String selectedProduct = (String) combo.getSelectedItem();
-		        if(selectedProduct.equals("All bugs"))
-		        {
-		        	//TODO list all the bugs
-		        }else{
-			        //TODO after we get the selected item, we must find the product id of the selected product and list bugs for only that product
-			        
-			        	
+		        try {
+		        	if(selectedProduct.equals("All bugs"))
+		        	{
+			        	Vector<Bug> temp = bugController.browseAllBugs();
+			        	bugList.setListData(temp);
+			        }else{
+			        	Vector<Bug> temp = bugController.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
+						if(temp != null)
+							bugList.setListData(bugController.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+						else
+							bugList.setListData(new Vector<Bug>()); //Just put in an empty vector 	
+			        }    
+		        }catch(IOException ioe){
+		        	JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
 		        }
+		        
 	
 			}	
 		});
