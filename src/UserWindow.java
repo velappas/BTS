@@ -3,13 +3,29 @@
  * @author Victoria Lappas
  */
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentListener;
+import java.io.IOException;
+import java.util.Vector;
+
 import javax.swing.*;
+
+import controllers.BugController;
+import controllers.ProductController;
+import entities.Bug;
+import entities.Product;
 
 public class UserWindow{
 	private JFrame userFrame;
 	private JTabbedPane tabbedPane;
+	private BugController bugC;
+	private ProductController prodC;
 
-	public UserWindow(){
+	public UserWindow()
+	{
+		bugC = new BugController();
+		prodC = new ProductController();
 		
 		//build user window using gui components
 		userFrame = new JFrame();
@@ -30,40 +46,71 @@ public class UserWindow{
 	
 	//browse bug screen
 	public void createBrowseBugScreen() {
-		JPanel browseBugsPanel = new JPanel();
-		browseBugsPanel.setLayout(null);
+		try
+		{
+			JPanel browseBugsPanel = new JPanel();
+			browseBugsPanel.setLayout(null);
 		
-		JLabel selectProductLabel = new JLabel("Select Product: ");
-		String [] productStringArray = {"Sample Product 1", "Sample Product 2"};
-		JComboBox<String> productList = new JComboBox<String>(productStringArray);		
-		productList.setSelectedIndex(0);
+			JLabel selectProductLabel = new JLabel("Select Product: ");
+			Vector<Product> productVector= prodC.browseAllProducts();
+			JComboBox<Product> productList = new JComboBox<Product>(productVector);		
+			productList.setSelectedIndex(0);
 	
-		JLabel bugLabel = new JLabel("Current Bugs ");
+			JLabel bugLabel = new JLabel("Current Bugs ");
 		
-		String [] bugStringArray = {"Sample bug 1", "Sample bug 2", "Sample bug 3"};
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+			Vector<Bug> bugVector = bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
+				
+			DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
+			
+			if(bugVector != null)
+			{
+				for(int i = 0; i < bugVector.size(); i++) {
+					listModel.addElement(bugVector.get(i));
+				}
+			}
 		
-		for(int i = 0; i < bugStringArray.length; i++) {
-			listModel.addElement(bugStringArray[i]);
+			JList<Bug> bugList = new JList<Bug>(listModel);
+			
+			productList.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent a)
+				{
+					try
+					{
+						Vector<Bug> temp = bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
+						if(temp != null)
+							bugList.setListData(bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+						else
+							bugList.setListData(new Vector<Bug>()); //Just put in an empty vector
+					}
+					catch(IOException b)
+					{
+						b.printStackTrace();
+					}
+				}
+			}
+					);
+		
+			bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			bugList.setLayoutOrientation(JList.VERTICAL);
+			JScrollPane bugListScroller = new JScrollPane(bugList);
+		
+			selectProductLabel.setBounds(80,30,150,30);
+			productList.setBounds(210,30,250,30);
+			bugLabel.setBounds(90,60,150,30);
+			bugListScroller.setBounds(90,90,400,200);
+		
+			browseBugsPanel.add(selectProductLabel);
+			browseBugsPanel.add(productList);
+			browseBugsPanel.add(bugLabel);
+			browseBugsPanel.add(bugListScroller);
+		
+			tabbedPane.addTab("Browse Bugs", browseBugsPanel);
 		}
-		
-		JList<String> bugList = new JList<String>(listModel);
-		
-		bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		bugList.setLayoutOrientation(JList.VERTICAL);
-		JScrollPane bugListScroller = new JScrollPane(bugList);
-		
-		selectProductLabel.setBounds(80,30,150,30);
-		productList.setBounds(210,30,250,30);
-		bugLabel.setBounds(90,60,150,30);
-		bugListScroller.setBounds(90,90,400,200);
-		
-		browseBugsPanel.add(selectProductLabel);
-		browseBugsPanel.add(productList);
-		browseBugsPanel.add(bugLabel);
-		browseBugsPanel.add(bugListScroller);
-		
-		tabbedPane.addTab("Browse Bugs", browseBugsPanel);
+			
+		catch(IOException a)
+		{
+			JOptionPane err = new JOptionPane("Issue reading from database.", JOptionPane.ERROR_MESSAGE);
+		}
 		
 	}
 	
