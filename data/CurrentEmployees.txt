@@ -1,2 +1,2 @@
-0, developer, Joe, pass
-1, project manager, Blow, password
+0, developer, Bob, pass
+1, project manager, Joe, password

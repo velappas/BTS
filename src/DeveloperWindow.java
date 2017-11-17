@@ -3,7 +3,6 @@
  * @author Victoria Lappas
  */
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -48,7 +47,7 @@ public class DeveloperWindow {
 		browseAssignmentsPanel.setLayout(null);
 		
 		JLabel assignmentLabel = new JLabel("Current Assigned Bugs ");
-		String [] assignmentStringArray = {"Assignment 1", "Assignment 2", "Assignment 3", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", };
+		String [] assignmentStringArray = {"Assignment 1", "Assignment 2", "Assignment 3" };
 		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
 		Vector<Bug> bugVector = null;
 		
@@ -60,8 +59,7 @@ public class DeveloperWindow {
 			JOptionPane err = new JOptionPane("Unexpected IOException occurred during bug retrieval.", JOptionPane.ERROR_MESSAGE);
 		}*/
 		
-		if(bugVector != null)
-		{
+		if(bugVector != null){
 			for(int i = 0; i < bugVector.size(); i++) {
 				listModel.addElement(bugVector.get(i));
 			}
@@ -115,12 +113,6 @@ public class DeveloperWindow {
 		try{
 			JPanel browseBugsPanel = new JPanel();
 			browseBugsPanel.setLayout(null);
-			
-			
-			
-			
-
-			
 			
 			JLabel productLabel = new JLabel("Product ");
 			

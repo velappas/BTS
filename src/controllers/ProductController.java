@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Vector;
 import entities.Product;
 
+
 public class ProductController 
 {
 	//Creates a new product and submits it to the DataBase
@@ -82,6 +83,7 @@ public class ProductController
 		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentProducts.txt"));
 		
 		Vector<Product> toReturn = new Vector<Product>();
+		
 		while(true)
 		{
 			String temp = fr.readLine();
@@ -100,3 +102,10 @@ public class ProductController
 			return toReturn;
 	}
 }
+
+
+
+
+
+
+
