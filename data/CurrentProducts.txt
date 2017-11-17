@@ -2,3 +2,6 @@
 1, Roomba
 3, Coffeepot
 4, WAIL
+5, Garmin Watch
+6, Samsung Galaxy S8
+7, Generic Mail Reader

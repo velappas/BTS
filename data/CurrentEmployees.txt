@@ -1,2 +1,8 @@
 0, developer, Bob, pass
 1, project manager, Joe, password
+3, developer, Luke, pass
+4, project manager, Victoria, password
+5, developer, Evan, pass
+6, developer, Greg, pass
+7, developer, Miles, pass
+8, project manager, Josh, pass
