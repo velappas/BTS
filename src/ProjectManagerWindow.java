@@ -22,6 +22,9 @@ public class ProjectManagerWindow {
 	private EmployeeController employeeController;
 	private BugController bugController;
 	private ProductController productController;
+	private JList<Bug> unassignedBugList;
+	private JComboBox<Employee> developerList;
+	private DefaultComboBoxModel<Employee> boxModel;
 	
 	//Project manager window constructor
 	public ProjectManagerWindow(Employee pmIn) {
@@ -49,30 +52,21 @@ public class ProjectManagerWindow {
 
 	//Assign and remove bug screen
 	public void createAssignBugScreen() {
-		try {
 		JPanel assignBugPanel = new JPanel();
 		assignBugPanel.setLayout(null);
 		
 		JLabel unassignedBugsLabel = new JLabel("Unassigned Bugs ");
 		
 		
-		JList<Bug> unassignedBugList = new JList<Bug>(updateUnassignedBugList());
-		unassignedBugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		unassignedBugList = new JList<Bug>(updateUnassignedBugList());
+		unassignedBugList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		unassignedBugList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane unassignedBugListScroller = new JScrollPane(unassignedBugList);
 		
+		
 		JLabel developerLabel = new JLabel("Select developer: ");
-		Vector<Employee> employeeVector = employeeController.getAllEmployees();
-		Vector<Employee> developerVector = new Vector<Employee>();
-		
-		//filter through employees and get only developers
-		for(int i = 0; i<employeeVector.size(); i++) {
-			if(employeeVector.get(i).getEmployeeType().equals("developer")) {
-				developerVector.add(employeeVector.get(i));
-			}
-		}
-		
-		JComboBox<Employee> developerList = new JComboBox<Employee>(developerVector);		
+		boxModel = new DefaultComboBoxModel<Employee>(getDeveloperList());
+		developerList = new JComboBox<Employee>(boxModel);		
 		developerList.setSelectedIndex(0);
 		
 		JButton assignButton = new JButton("Assign Bug");
@@ -95,14 +89,14 @@ public class ProjectManagerWindow {
 						
 						bugController.assignDeveloper(temp.getID(), temp.getAssDev());
 						unassignedBugList.setModel(updateUnassignedBugList());
-					}
-					
-				}
-				catch(IOException o) {
-					JOptionPane.showMessageDialog(PMFrame, "Issue with assignment in the database");
-				}
-			}
 
+						
+					}
+				}
+			catch(IOException z) {
+				JOptionPane.showMessageDialog(PMFrame, "Issue with removal in the database");
+			}
+			} 
 		});		
 		
 		
@@ -145,12 +139,30 @@ public class ProjectManagerWindow {
 		assignBugPanel.add(developerList);
 		
 		tabbedPane.addTab("Assign Bugs", assignBugPanel);
+	
+	}
+	
+	
+	public Vector<Employee> getDeveloperList(){
+		Vector<Employee> developerVector = new Vector<Employee>();
+		
+		try {
+		Vector<Employee> employeeVector = employeeController.getAllEmployees();
+		
+		//filter through employees and get only developers
+		for(int i = 0; i<employeeVector.size(); i++) {
+			if(employeeVector.get(i).getEmployeeType().equals("developer")) {
+				developerVector.add(employeeVector.get(i));
+			}
+		}
+		
 		}
 		catch(IOException e) {
 			JOptionPane.showMessageDialog(PMFrame, "Issue with getting developers from the database");
 		}
-	
+		return developerVector;
 	}
+	
 	
 	//Modify product screen 
 	public void createModifyProductScreen() {
@@ -160,7 +172,7 @@ public class ProjectManagerWindow {
 		JLabel productListLabel = new JLabel("Product List ");
 		
 		JList<Product> productList = new JList<Product>(updateProductList());
-		productList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		productList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		productList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane productListScroller = new JScrollPane(productList);
 		
@@ -242,7 +254,7 @@ public class ProjectManagerWindow {
 			JLabel employeeListLabel = new JLabel("Employee List ");
 
 			JList<Employee> employeeList = new JList<Employee>(updateEmployeeList());
-			employeeList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			employeeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			employeeList.setLayoutOrientation(JList.VERTICAL);
 			JScrollPane employeeListScroller = new JScrollPane(employeeList);			
 			
@@ -274,6 +286,8 @@ public class ProjectManagerWindow {
 							else {
 									employeeController.removeEmployee(temp.getID());
 									employeeList.setModel(updateEmployeeList());
+									boxModel = new DefaultComboBoxModel<Employee>(getDeveloperList());
+									developerList.setModel(boxModel);
 							}
 							
 						}
@@ -307,6 +321,8 @@ public class ProjectManagerWindow {
 						else {
 							employeeController.createEmployee(name,password, type);
 							employeeList.setModel(updateEmployeeList());
+							boxModel = new DefaultComboBoxModel<Employee>(getDeveloperList());
+							developerList.setModel(boxModel);
 						}
 						
 					}
