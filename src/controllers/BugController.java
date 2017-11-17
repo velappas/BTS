@@ -22,10 +22,12 @@ import entities.Bug;
 
 public class BugController 
 {
-	//Creates a new Bug and submits it to the database
-	//@param bug_description - description of the found Bug
-	//@param product_ID - ID of the product associated with the found bug
-	//@throws IOException - if there is an issue writing to the database
+	/**
+	Creates a new Bug and submits it to the database
+	@param bug_description - description of the found Bug
+	@param product_ID - ID of the product associated with the found bug
+	@throws IOException - if there is an issue writing to the database
+	*/
 	public void submitBug(String bug_description, int product_ID) throws IOException
 	{
 		Bug toSub = new Bug(bug_description, product_ID);
