@@ -26,6 +26,7 @@ public class DeveloperWindow {
 	public DeveloperWindow(Employee devID) {
 		developer = devID;
 		bugController = new BugController();
+		productController = new ProductController();
 		developerFrame = new JFrame();
 		developerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		developerFrame.setTitle("Bug Tracking System - Developer Window");
