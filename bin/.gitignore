@@ -3,8 +3,22 @@
 /DeveloperWindow.class
 /ProjectManagerWindow.class
 /UserWindow$1.class
+<<<<<<< HEAD
 /UserWindow$2.class
 /UserWindow.class
 /controllers/
 /entities/
 /UserWindow$3.class
+=======
+/DeveloperWindow$1.class
+/DeveloperWindow$2.class
+/UserWindow$2.class
+/UserWindow$3.class
+<<<<<<< HEAD
+=======
+/ProjectManagerWindow$1.class
+/ProjectManagerWindow$2.class
+/ProjectManagerWindow$3.class
+/ProjectManagerWindow$4.class
+>>>>>>> branch 'master' of https://github.com/velappas/BTS.git
+>>>>>>> branch 'master' of https://github.com/velappas/bts.git
