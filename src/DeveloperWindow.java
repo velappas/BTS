@@ -90,6 +90,7 @@ public class DeveloperWindow {
 					{
 						try {
 							bugController.updateBugState(assignmentList.getSelectedValue().getID(),"Fixed");
+							assignmentList.remove(assignmentList.getSelectedValue().getID());
 						} catch (FileNotFoundException e1) {
 							JOptionPane err = new JOptionPane("Couldn't find the file to write to.", JOptionPane.ERROR_MESSAGE);
 						} catch (IOException e1) {
@@ -99,6 +100,7 @@ public class DeveloperWindow {
 					{
 						try {
 							bugController.removeBug(assignmentList.getSelectedValue().getID());
+							assignmentList.remove(assignmentList.getSelectedValue().getID());
 						} catch (FileNotFoundException e1) {
 							JOptionPane err = new JOptionPane("Couldn't find the bug file to remove from.", JOptionPane.ERROR_MESSAGE);
 						} catch (IOException e1) {
