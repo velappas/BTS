@@ -227,7 +227,7 @@ public class UserWindow{
 							{
 								if(tempE.getEmployeeType().equalsIgnoreCase("developer"))
 								{
-									DeveloperWindow devWindow = new DeveloperWindow();
+									DeveloperWindow devWindow = new DeveloperWindow(tempE);
 								}
 								else
 								{
@@ -239,7 +239,7 @@ public class UserWindow{
 							{
 								if(tempE.getEmployeeType().equalsIgnoreCase("project manager"))
 								{
-									ProjectManagerWindow manWindow = new ProjectManagerWindow();
+									ProjectManagerWindow manWindow = new ProjectManagerWindow(tempE);
 								}
 								else
 								{

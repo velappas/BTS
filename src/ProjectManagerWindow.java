@@ -5,12 +5,15 @@
 
 import javax.swing.*;
 
+import entities.Employee;
+
 public class ProjectManagerWindow {
 	private JFrame PMFrame;
 	private JTabbedPane tabbedPane;
+	private Employee pm;
 	
 	//Project manager window constructor
-	public ProjectManagerWindow() {
+	public ProjectManagerWindow(Employee pmIn) {
 		PMFrame = new JFrame();
 		PMFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		PMFrame.setTitle("Bug Tracking System - Project Manager Window");
@@ -27,6 +30,7 @@ public class ProjectManagerWindow {
 		PMFrame.add(tabbedPane);
 		PMFrame.setVisible(true);
 		
+		pm = pmIn;
 	}
 
 	//Assign and remove bug screen
@@ -205,7 +209,7 @@ public class ProjectManagerWindow {
 	
 	
 	public static void main(String[] args){
-		ProjectManagerWindow PMWindow = new ProjectManagerWindow();
+		ProjectManagerWindow PMWindow = new ProjectManagerWindow(new Employee("", "", ""));
 	}
 	
 	
