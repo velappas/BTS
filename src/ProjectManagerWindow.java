@@ -21,11 +21,13 @@ public class ProjectManagerWindow {
 	private Employee pm;
 	private EmployeeController employeeController;
 	private BugController bugController;
+	private ProductController productController;
 	
 	//Project manager window constructor
 	public ProjectManagerWindow(Employee pmIn) {
 		employeeController = new EmployeeController();
 		bugController = new BugController();
+		productController = new ProductController();
 		PMFrame = new JFrame();
 		PMFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		PMFrame.setTitle("Bug Tracking System - Project Manager Window");
@@ -47,36 +49,91 @@ public class ProjectManagerWindow {
 
 	//Assign and remove bug screen
 	public void createAssignBugScreen() {
+		try {
 		JPanel assignBugPanel = new JPanel();
 		assignBugPanel.setLayout(null);
 		
 		JLabel unassignedBugsLabel = new JLabel("Unassigned Bugs ");
-		String [] unassignedBugArray = {"Unassigned Bug 1", "Unassigned Bug 2", "Unassigned Bug 3"};
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
-		for(int i = 0; i < unassignedBugArray.length; i++) {
-			listModel.addElement(unassignedBugArray[i]);
-		}
 		
-		JList<String> unassignedBugList = new JList<String>(listModel);
+		JList<Bug> unassignedBugList = new JList<Bug>(updateUnassignedBugList());
 		unassignedBugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		unassignedBugList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane unassignedBugListScroller = new JScrollPane(unassignedBugList);
 		
 		JLabel developerLabel = new JLabel("Select developer: ");
-		String [] developerArray = {"001 - Name", "002 - Name", "003 - Name"};
-		JComboBox<String> developerList = new JComboBox<String>(developerArray);		
+		Vector<Employee> employeeVector = employeeController.getAllEmployees();
+		Vector<Employee> developerVector = new Vector<Employee>();
+		
+		//filter through employees and get only developers
+		for(int i = 0; i<employeeVector.size(); i++) {
+			if(employeeVector.get(i).getEmployeeType().equals("developer")) {
+				developerVector.add(employeeVector.get(i));
+			}
+		}
+		
+		JComboBox<Employee> developerList = new JComboBox<Employee>(developerVector);		
 		developerList.setSelectedIndex(0);
 		
-		JButton removeBugButton = new JButton("Remove Bug");
 		JButton assignButton = new JButton("Assign Bug");
+		/*
+		assignButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					Bug temp = unassignedBugList.getSelectedValue();
+					if(temp == null) {
+						JOptionPane.showMessageDialog(PMFrame, "Please select a bug for assignment");
+					}
+					else if(developerList.getSelectedItem().equals(null)) {
+						JOptionPane.showMessageDialog(PMFrame, "Please select a developer for assignment");
+					}
+					else {
+						temp.setStatus("assigned");
+						temp.setDeveloper(developerList.getSelectedItem().getID());
+						unassignedBugList.setModel(updateUnassignedBugList());
+					}
+					
+				}
+				catch(IOException o) {
+					JOptionPane.showMessageDialog(PMFrame, "Issue with assignment in the database");
+				}
+			}
+
+		});		
+		*/
+		
+		JButton removeBugButton = new JButton("Remove Bug");
+		removeBugButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					Bug temp = unassignedBugList.getSelectedValue();
+					if(temp == null) {
+						JOptionPane.showMessageDialog(PMFrame, "Please select a bug for removal");
+					}
+					else {
+							bugController.removeBug(temp.getID());
+							unassignedBugList.setModel(updateUnassignedBugList());
+					}
+					
+				}
+				catch(IOException o) {
+					JOptionPane.showMessageDialog(PMFrame, "Issue with removal in the database");
+				}
+			}
+
+		});
+		
 		
 		unassignedBugsLabel.setBounds(80,20,150,30);
 		unassignedBugListScroller.setBounds(80,60,400,150);
 		removeBugButton.setBounds(360,20,125,30);
 		assignButton.setBounds(200,300,150,30);
 		developerLabel.setBounds(120,250,150,30);
-		developerList.setBounds(245,250,150,30);
+		developerList.setBounds(245,250,235,30);
 		
 		assignBugPanel.add(unassignedBugsLabel);
 		assignBugPanel.add(unassignedBugListScroller);
@@ -86,7 +143,11 @@ public class ProjectManagerWindow {
 		assignBugPanel.add(developerList);
 		
 		tabbedPane.addTab("Assign Bugs", assignBugPanel);
-		
+		}
+		catch(IOException e) {
+			JOptionPane.showMessageDialog(PMFrame, "Issue with getting developers from the database");
+		}
+	
 	}
 	
 	//Modify product screen 
@@ -95,14 +156,8 @@ public class ProjectManagerWindow {
 		modifyProductPanel.setLayout(null);
 		
 		JLabel productListLabel = new JLabel("Product List ");
-		String [] productArray = {"Product 1", "Product 2", "Product 3"};
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
 		
-		for(int i = 0; i < productArray.length; i++) {
-			listModel.addElement(productArray[i]);
-		}
-		
-		JList<String> productList = new JList<String>(listModel);
+		JList<Product> productList = new JList<Product>(updateProductList());
 		productList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		productList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane productListScroller = new JScrollPane(productList);
@@ -111,7 +166,53 @@ public class ProjectManagerWindow {
 		JTextField productNameField = new JTextField();
 		
 		JButton removeProductButton = new JButton("Remove Product");
+		removeProductButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Product temp = productList.getSelectedValue();
+					if(temp == null) {
+						JOptionPane.showMessageDialog(PMFrame, "Please select a product for removal");
+					}
+					else {
+							productController.removeProduct(temp.getProductID());
+							productList.setModel(updateProductList());
+					}
+					
+				}
+				catch(IOException o) {
+					JOptionPane.showMessageDialog(PMFrame, "Issue with removal in the database");
+				}
+			}
+		
+		
+		});
+		
+		
+		
+		
 		JButton addProductButton = new JButton("Add Product");
+		addProductButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					if(productNameField.getText().equals("")) {
+						JOptionPane.showMessageDialog(PMFrame, "Please enter a project name");
+					}
+					else {
+						String name = productNameField.getText();
+						productController.createProduct(name);
+						productList.setModel(updateProductList());
+					}
+					
+				}
+				catch(IOException o) {
+					JOptionPane.showMessageDialog(PMFrame, "Issue with adding into the database");
+				}
+			}
+		});
+		
+		
 		
 		productListLabel.setBounds(80,20,150,30);
 		productListScroller.setBounds(80,60,400,150);
@@ -212,6 +313,8 @@ public class ProjectManagerWindow {
 					}
 				}
 			});
+			
+	
 		
 			
 			//update employee information
@@ -289,6 +392,46 @@ public class ProjectManagerWindow {
 			tabbedPane.addTab("Modify Employees", modifyEmployeePanel);
 	}
 	
+	//returns a list model for the product list when called
+	DefaultListModel<Bug> updateUnassignedBugList(){
+		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
+		try {
+			Vector<Bug> bugVector = bugController.browseAllBugs();
+	
+			if(bugVector != null) {
+				for(int i = 0; i < bugVector.size(); i++) {
+					if(bugVector.get(i).getStatus().equals("Submitted")) {
+						listModel.addElement(bugVector.get(i));
+					}	
+				}
+			
+			}
+		}
+		catch(IOException e) {
+			JOptionPane err = new JOptionPane("Issue reading from database", JOptionPane.ERROR_MESSAGE);
+		}
+		return listModel;
+	}
+	
+	
+	//returns a list model for the product list when called
+	DefaultListModel<Product> updateProductList(){
+		DefaultListModel<Product> listModel = new DefaultListModel<Product>();
+		try {
+			Vector<Product> productVector = productController.browseAllProducts();
+	
+			if(productVector != null) {
+				for(int i = 0; i < productVector.size(); i++) {
+					listModel.addElement(productVector.get(i));
+				}
+			
+			}
+		}
+		catch(IOException e) {
+			JOptionPane err = new JOptionPane("Issue reading from database", JOptionPane.ERROR_MESSAGE);
+		}
+		return listModel;
+	}
 	
 	//returns a list model for the employee list when called
 	DefaultListModel<Employee> updateEmployeeList(){
