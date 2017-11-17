@@ -1,7 +1,3 @@
-/*
- * DeveloperWindow is the class that provides a GUI for a developer to interact with.
- * @author Victoria Lappas
- */
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -14,7 +10,11 @@ import controllers.*;
 import entities.*;
 
 import javax.swing.*;
-
+/**
+ * Boundary class that presents the developer with their developer options
+ * @author Luke Elliott
+ *
+ */
 public class DeveloperWindow {
 	private JFrame developerFrame;
 	private JTabbedPane tabbedPane;
@@ -22,7 +22,10 @@ public class DeveloperWindow {
 	private ProductController productController;
 	private Employee developer;
 	
-	//Developer window constructor
+	/**
+	 * Constructs the developer window
+	 * @param devID the ID of the developer who logged in, this is used to fetch the specific user's assignments
+	 */
 	public DeveloperWindow(Employee devID) {
 		developer = devID;
 		bugController = new BugController();
@@ -42,7 +45,9 @@ public class DeveloperWindow {
 		developerFrame.setVisible(true);
 	}
 	
-	//browse assignments screen
+	/**
+	 * Creates the browseAssignments tab and then adds it to the tabbed pane
+	 */
 	public void createBrowseAssignmentsScreen() {
 		
 			JPanel browseAssignmentsPanel = new JPanel();
@@ -129,7 +134,9 @@ public class DeveloperWindow {
 		
 	}
 	
-	//browse all bugs screen
+	/**
+	 * Creates the browse all bugs tab and adds it to the tabbed pane
+	 */
 	public void createBrowseAllBugsScreen() {
 		try{
 			JPanel browseBugsPanel = new JPanel();
