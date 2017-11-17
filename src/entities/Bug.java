@@ -143,4 +143,12 @@ public class Bug
 		IDCount = Integer.parseInt(startupinfo.split(", ")[0]);
 		f.close();
 	}
+	
+	//@return - this.status
+	public String getStatus() 
+	{
+		return status;
+	}
+	
+	
 }
