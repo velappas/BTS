@@ -199,7 +199,7 @@ public class BugController
 				found = true;
 				SimpleDateFormat date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");	//Dates in the database are formatted like this
 				String arr[] = tString.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
-				Bug temp = new Bug(Integer.parseInt(arr[0]), arr[1], Integer.parseInt(arr[2]), arr[3], date.parse(arr[4], new ParsePosition(0)), developer_id);
+				Bug temp = new Bug(Integer.parseInt(arr[0]), arr[1], Integer.parseInt(arr[2]), "Assigned", date.parse(arr[4], new ParsePosition(0)), developer_id);
 				lines.add(temp.toStringDatabase());	//Add the edited bug. Everything will be the same except for the changed developer ID field
 			}
 			else

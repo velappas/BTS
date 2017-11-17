@@ -76,7 +76,7 @@ public class ProjectManagerWindow {
 		developerList.setSelectedIndex(0);
 		
 		JButton assignButton = new JButton("Assign Bug");
-		/*
+		
 		assignButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -91,7 +91,9 @@ public class ProjectManagerWindow {
 					}
 					else {
 						temp.setStatus("assigned");
-						temp.setDeveloper(developerList.getSelectedItem().getID());
+						temp.setDeveloper(((Employee)developerList.getSelectedItem()).getID());
+						
+						bugController.assignDeveloper(temp.getID(), temp.getAssDev());
 						unassignedBugList.setModel(updateUnassignedBugList());
 					}
 					
@@ -102,7 +104,7 @@ public class ProjectManagerWindow {
 			}
 
 		});		
-		*/
+		
 		
 		JButton removeBugButton = new JButton("Remove Bug");
 		removeBugButton.addActionListener(new ActionListener() {

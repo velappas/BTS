@@ -118,6 +118,12 @@ public class Bug
 		return date_submitted;
 	}
 	
+	//@return - this.assigned_developer
+	public int getAssDev()
+	{
+		return assigned_developer;
+	}
+	
 	@Override
 	//This method allows for nice formatting in the GUI
 	//@return - A String representation of 'this' bug
