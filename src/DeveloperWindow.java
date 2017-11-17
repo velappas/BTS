@@ -111,76 +111,78 @@ public class DeveloperWindow {
 	
 	//browse all bugs screen
 	public void createBrowseAllBugsScreen() {
-		JPanel browseBugsPanel = new JPanel();
-		browseBugsPanel.setLayout(null);
-		
-		JLabel browseBugsLabel = new JLabel("Browse Bugs ");
-		
-		//TODO get list of bugs from the database
-		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
-		
-		
-		JList<Bug> bugList = new JList<Bug>(listModel);
-		bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		bugList.setLayoutOrientation(JList.VERTICAL);
-		JScrollPane bugListScroller = new JScrollPane(bugList);
-		
-		Vector<Product> productVector = null;
-		
-		JLabel productLabel = new JLabel("Product ");
 		try{
+			JPanel browseBugsPanel = new JPanel();
+			browseBugsPanel.setLayout(null);
+			
+			JLabel browseBugsLabel = new JLabel("Browse Bugs ");
+			
+			//TODO get list of bugs from the database
+			DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
+			
+			
+			JList<Bug> bugList = new JList<Bug>(listModel);
+			bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			bugList.setLayoutOrientation(JList.VERTICAL);
+			JScrollPane bugListScroller = new JScrollPane(bugList);
+			
+			
+			JLabel productLabel = new JLabel("Product ");
+			
+			Vector<Product> productVector = null;
 			productVector = productController.browseAllProducts();
-		}catch(FileNotFoundException fnf){
-			JOptionPane err = new JOptionPane("Problem getting the products from the database.", JOptionPane.ERROR_MESSAGE);
-		}catch(IOException ioe){
-			JOptionPane err = new JOptionPane("Unexpected IOException occurred during product retrieval.", JOptionPane.ERROR_MESSAGE);
+			
+			
 		
-
-		JComboBox<Product> productList = new JComboBox<Product>(productVector);		
-		productList.setSelectedIndex(0);
+			JComboBox<Product> productList = new JComboBox<Product>(productVector);		
+			productList.setSelectedIndex(0);
+			
+			productList.addActionListener(new ActionListener(){ //Listener for determining selected product and listing related bugs
+				public void actionPerformed(ActionEvent e) {
+					JComboBox<String> combo = (JComboBox<String>) e.getSource(); //establish a reference to the JComboBox, "this" can't be used in anonymous inner classes
+			        String selectedProduct = (String) combo.getSelectedItem();
+			        try {
+			        	if(selectedProduct.equals("All bugs"))
+			        	{
+				        	Vector<Bug> temp = bugController.browseAllBugs();
+				        	bugList.setListData(temp);
+				        }else{
+				        	Vector<Bug> temp = bugController.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
+							if(temp != null)
+								bugList.setListData(bugController.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+							else
+								bugList.setListData(new Vector<Bug>()); //Just put in an empty vector 	
+				        }    
+			        }catch(IOException ioe){
+			        	JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
+			        }
+			        
 		
-		productList.addActionListener(new ActionListener(){ //Listener for determining selected product and listing related bugs
-			public void actionPerformed(ActionEvent e) {
-				JComboBox<String> combo = (JComboBox<String>) e.getSource(); //establish a reference to the JComboBox, "this" can't be used in anonymous inner classes
-		        String selectedProduct = (String) combo.getSelectedItem();
-		        try {
-		        	if(selectedProduct.equals("All bugs"))
-		        	{
-			        	Vector<Bug> temp = bugController.browseAllBugs();
-			        	bugList.setListData(temp);
-			        }else{
-			        	Vector<Bug> temp = bugController.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
-						if(temp != null)
-							bugList.setListData(bugController.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
-						else
-							bugList.setListData(new Vector<Bug>()); //Just put in an empty vector 	
-			        }    
-		        }catch(IOException ioe){
-		        	JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
-		        }
-		        
-	
-			}	
-		});
+				}	
+			});
+			
+			
+			browseBugsLabel.setBounds(80,20,150,30);
+			bugListScroller.setBounds(80,60,400,200);
+			productLabel.setBounds(280,20,150,30);
+			productList.setBounds(330,20,150,30);
+			
+			browseBugsPanel.add(browseBugsLabel);
+			browseBugsPanel.add(bugListScroller);
+			browseBugsPanel.add(productLabel);
+			browseBugsPanel.add(productList);
+			
+			tabbedPane.addTab("Browse Bugs", browseBugsPanel);
 		
+		}catch(IOException e){
+			JOptionPane err = new JOptionPane("Issue reading from database.", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		browseBugsLabel.setBounds(80,20,150,30);
-		bugListScroller.setBounds(80,60,400,200);
-		productLabel.setBounds(280,20,150,30);
-		productList.setBounds(330,20,150,30);
-		
-		browseBugsPanel.add(browseBugsLabel);
-		browseBugsPanel.add(bugListScroller);
-		browseBugsPanel.add(productLabel);
-		browseBugsPanel.add(productList);
-		
-		tabbedPane.addTab("Browse Bugs", browseBugsPanel);
 	}
-	}
 	
-	public static void main(String[] args){
+	/*public static void main(String[] args){
 		DeveloperWindow developerWindow = new DeveloperWindow(new Employee("", "", ""));
-	}
+	}*/
 	
 	
 }
