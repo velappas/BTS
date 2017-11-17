@@ -48,13 +48,13 @@ public class DeveloperWindow {
 		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
 		Vector<Bug> bugVector = null;
 		
-		try{ //Try to display the assignments assigned to the logged in developer
+		/*try{ //Try to display the assignments assigned to the logged in developer
 			bugVector = bugController.browseAssignedBugs(developer.getID());
 		}catch(FileNotFoundException fnf){
 			JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
 		}catch(IOException ioe){
 			JOptionPane err = new JOptionPane("Unexpected IOException occurred.", JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
 		
 		if(bugVector != null)
 		{
