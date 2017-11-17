@@ -1,4 +1,4 @@
-0, Awful product., 1, Submitted, Thu Nov 16 20:30:05 MST 2017, -1
+0, Awful product., 1, Submitted, Thu Nov 16 20:30:05 MST 2017, 0
 1, Burns up all my coffee., 3, Submitted, Thu Nov 16 20:30:15 MST 2017, -1
-2, :(, 4, Submitted, Thu Nov 16 20:30:23 MST 2017, -1
+2, :(, 4, Submitted, Thu Nov 16 20:30:23 MST 2017, 0
 3, Greatest product ever made., 0, Submitted, Thu Nov 16 20:30:46 MST 2017, -1

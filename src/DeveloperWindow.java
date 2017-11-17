@@ -86,7 +86,7 @@ public class DeveloperWindow {
 			
 			updateButton.addActionListener(new ActionListener(){ //Update bug status listener implemented with an anonymous inner class
 				public void actionPerformed(ActionEvent e){
-					if (reportFixedButton.isSelected())
+					if (reportFixedButton.isSelected()) //report fixed
 					{
 						try {
 							bugController.updateBugState(assignmentList.getSelectedValue().getID(),"Fixed");
