@@ -27,7 +27,7 @@ public class EmployeeController
 	{
 		Employee toSub = new Employee(employee_type, name, password);
 		BufferedWriter fw = new BufferedWriter(new FileWriter("data/CurrentEmployees.txt", true));	//TODO: Hard coded in. Could change.
-		fw.write(toSub.toString());	//Write with toString method for consistency
+		fw.write(toSub.toStringDatabase());	//Write with toStringDatabase method for consistency
 		fw.newLine();
 		fw.flush();
 		fw.close();
@@ -126,7 +126,7 @@ public class EmployeeController
 					found = true;
 					String arr[] = tString.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
 					Employee temp = new Employee(Integer.parseInt(arr[0]), status, arr[2], arr[3]);
-					lines.add(temp.toString());	//Add the edited employee. Everything will be the same except for the employee type field
+					lines.add(temp.toStringDatabase());	//Add the edited employee. Everything will be the same except for the employee type field
 				}
 				else
 					lines.add(tString);
@@ -173,7 +173,7 @@ public class EmployeeController
 					found = true;
 					String arr[] = tString.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
 					Employee temp = new Employee(Integer.parseInt(arr[0]), arr[1], newName, newPass);
-					lines.add(temp.toString());	//Add the edited employee.
+					lines.add(temp.toStringDatabase());	//Add the edited employee.
 				}
 				else
 					lines.add(tString);

@@ -61,10 +61,17 @@ public class Employee
     }
     
     @Override
+    //This method allows for nice formatting in the gui
+  	//@return - A String representation of 'this' Product
+    public String toString()
+    {
+    	return "Employee name: " + name + ", Employee Password: " + password + ", Employee Type: " + employee_type + ".";
+    }
+    
     //This method allows for consistent formatting when writing products to the database
   	//The format of the string returned is "employee_id employee_type name password"
   	//@return - A String representation of 'this' Product
-    public String toString()
+    public String toStringDatabase()
     {
     	return employee_id + ", " + employee_type + ", " + name + ", " + password;
     }

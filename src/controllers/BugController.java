@@ -30,7 +30,7 @@ public class BugController
 	{
 		Bug toSub = new Bug(bug_description, product_ID);
 		BufferedWriter fw = new BufferedWriter(new FileWriter("data/CurrentBugs.txt", true));	//TODO: Hard coded in. Could change.
-		fw.write(toSub.toString());	//Write with toString method for consistency
+		fw.write(toSub.toStringDatabase());	//Write with toStringDatabse method for consistency
 		fw.newLine();
 		fw.flush();
 		fw.close();
@@ -198,7 +198,7 @@ public class BugController
 				SimpleDateFormat date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");	//Dates in the database are formatted like this
 				String arr[] = tString.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
 				Bug temp = new Bug(Integer.parseInt(arr[0]), arr[1], Integer.parseInt(arr[2]), arr[3], date.parse(arr[4], new ParsePosition(0)), developer_id);
-				lines.add(temp.toString());	//Add the edited bug. Everything will be the same except for the changed developer ID field
+				lines.add(temp.toStringDatabase());	//Add the edited bug. Everything will be the same except for the changed developer ID field
 			}
 			else
 				lines.add(tString);
@@ -245,7 +245,7 @@ public class BugController
 				SimpleDateFormat date = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");	//Dates in the database are formatted like this
 				String arr[] = tString.split(", ");	//Split the vector by spaces and commas, as that's how they are organized in the database
 				Bug temp = new Bug(Integer.parseInt(arr[0]), arr[1], Integer.parseInt(arr[2]), status, date.parse(arr[4], new ParsePosition(0)), Integer.parseInt(arr[5]));
-				lines.add(temp.toString());	//Add the edited bug. Everything will be the same except for the changed developer ID field
+				lines.add(temp.toStringDatabase());	//Add the edited bug. Everything will be the same except for the changed developer ID field
 			}
 			else
 				lines.add(tString);

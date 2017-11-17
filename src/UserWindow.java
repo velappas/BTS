@@ -72,6 +72,7 @@ public class UserWindow{
 			JList<Bug> bugList = new JList<Bug>(listModel);
 			
 			productList.addActionListener(new ActionListener(){
+				@Override
 				public void actionPerformed(ActionEvent a)
 				{
 					try
@@ -79,6 +80,7 @@ public class UserWindow{
 						Vector<Bug> temp = bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
 						if(temp != null)
 							bugList.setListData(bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
+						
 						else
 							bugList.setListData(new Vector<Bug>()); //Just put in an empty vector
 					}
@@ -117,33 +119,68 @@ public class UserWindow{
 	
 	//submit bug screen
 	public void createSubmitBugScreen() {
-		JPanel submitBugPanel = new JPanel();
-		submitBugPanel.setLayout(null);
+		try
+		{
+			JPanel submitBugPanel = new JPanel();
+			submitBugPanel.setLayout(null);
 
-		JLabel description = new JLabel("Description: ");
-		JTextField descriptionField = new JTextField(60);
+			JLabel description = new JLabel("Description: ");
+			JTextField descriptionField = new JTextField(60);
 		
-		JLabel productName = new JLabel("Product Name: ");
-		String [] productStringArray = {"Sample Product 1", "Sample Product 2"};
-		JComboBox<String> productList = new JComboBox<String>(productStringArray);
-		productList.setSelectedIndex(0);
+			JLabel productName = new JLabel("Product Name: ");
+			Vector<Product> productVector= prodC.browseAllProducts();
+			JComboBox<Product> productList = new JComboBox<Product>(productVector);
+			productList.setSelectedIndex(0);
 		
-		JButton submitButton = new JButton("Submit");
+			JButton submitButton = new JButton("Submit");
+			submitButton.addActionListener(new ActionListener()
+					{
+						@Override
+						public void actionPerformed(ActionEvent e) 
+						{
+							try
+							{
+								String temp = descriptionField.getText();
+								if(temp.contains(", "))
+								{
+									JOptionPane.showMessageDialog(userFrame, "Please do not use commas in your description.");
+								}
+								else if(temp.isEmpty())
+								{
+									JOptionPane.showMessageDialog(userFrame, "Please enter a description.");
+								}
+								else
+									bugC.submitBug(temp, ((Product)productList.getSelectedItem()).getProductID());
+							}
+							catch(IOException a)
+							{
+								a.printStackTrace();
+							}
+						
+						}
+			
+					});
 		
-		description.setBounds(100,80,150,30);
-		descriptionField.setBounds(220,80,250,30);
-		productName.setBounds(100,130,150,30);
-		productList.setBounds(220,130,250,30);
-		submitButton.setBounds(180,180,100,30);
+			description.setBounds(100,80,150,30);
+			descriptionField.setBounds(220,80,250,30);
+			productName.setBounds(100,130,150,30);
+			productList.setBounds(220,130,250,30);
+			submitButton.setBounds(180,180,100,30);
 		
-		submitBugPanel.add(description);
-		submitBugPanel.add(descriptionField);
-		submitBugPanel.add(productName);
-		submitBugPanel.add(productList);
-		submitBugPanel.add(submitButton);
+			submitBugPanel.add(description);
+			submitBugPanel.add(descriptionField);
+			submitBugPanel.add(productName);
+			submitBugPanel.add(productList);
+			submitBugPanel.add(submitButton);
 		
-		tabbedPane.addTab("Submit Bug", submitBugPanel);
+			tabbedPane.addTab("Submit Bug", submitBugPanel);
 		
+		}
+		catch(IOException a)
+		{
+			JOptionPane err = new JOptionPane("Issue reading from database.", JOptionPane.ERROR_MESSAGE);
+			err.setVisible(true);
+		}
 	}
 	
 	

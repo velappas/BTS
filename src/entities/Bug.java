@@ -95,10 +95,17 @@ public class Bug
 	}
 	
 	@Override
+	//This method allows for nice formatting in the GUI
+	//@return - A String representation of 'this' bug
+	public String toString()
+	{
+		return "Description: " + bug_description + ", " + "Status: " + status + ", " + "Date Submitted: " + date_submitted + ".";
+	}
+	
 	//This method allows for consistent formatting when writing bugs to the database
 	//The format of the string returned is "bugID bug_description productID status date_submitted assigned_developer"
 	//@return - A String representation of 'this' bug
-	public String toString()
+	public String toStringDatabase()
 	{
 		return bugID + ", " + bug_description + ", " + productID + ", " + status + ", " + date_submitted + ", " + assigned_developer;
 	}

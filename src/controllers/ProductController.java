@@ -26,7 +26,7 @@ public class ProductController
 	{
 		Product toSub = new Product(name);
 		BufferedWriter fw = new BufferedWriter(new FileWriter("data/CurrentProducts.txt", true));	//TODO: Hard coded in. Could change.
-		fw.write(toSub.toString());	//Write with toString method for consistency
+		fw.write(toSub.toStringDatabase());	//Write with toStringDatabase method for consistency
 		fw.newLine();
 		fw.flush();
 		fw.close();
