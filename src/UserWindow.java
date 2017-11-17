@@ -24,8 +24,19 @@ public class UserWindow{
 	public UserWindow()
 	{
 		bugC = new BugController();
-		prodC = new ProductController();
+		prodC = new ProductController();	//Initialize system controllers
 		emC = new EmployeeController();
+		
+		try
+		{
+			Bug.setIDCount();		//Set startup information so the system remembers how many ID's
+			Product.setIDCount();	//are allocated.
+			Employee.setIDCount();
+		}
+		catch(IOException a)
+		{
+			JOptionPane.showMessageDialog(userFrame, "Error reading startup information from the test file. Please restart the program and try again.");
+		}
 		
 		//build user window using gui components
 		userFrame = new JFrame();

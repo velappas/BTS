@@ -1,2 +1,2 @@
-0, employee_type, name, password
-0, employee_type, name, password
+0, developer, Joe, pass
+1, project manager, Blow, password
