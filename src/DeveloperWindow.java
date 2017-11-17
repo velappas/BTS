@@ -19,11 +19,12 @@ public class DeveloperWindow {
 	private JFrame developerFrame;
 	private JTabbedPane tabbedPane;
 	private BugController bugController;
+	private ProductController productController;
 	private Employee developer;
 	
 	//Developer window constructor
-	public DeveloperWindow(Employee devIn) {
-		developer = devIn;
+	public DeveloperWindow(Employee devID) {
+		developer = devID;
 		bugController = new BugController();
 		developerFrame = new JFrame();
 		developerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,7 +56,7 @@ public class DeveloperWindow {
 		}catch(FileNotFoundException fnf){
 			JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
 		}catch(IOException ioe){
-			JOptionPane err = new JOptionPane("Unexpected IOException occurred.", JOptionPane.ERROR_MESSAGE);
+			JOptionPane err = new JOptionPane("Unexpected IOException occurred during bug retrieval.", JOptionPane.ERROR_MESSAGE);
 		}*/
 		
 		if(bugVector != null)
@@ -124,9 +125,18 @@ public class DeveloperWindow {
 		bugList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane bugListScroller = new JScrollPane(bugList);
 		
+		Vector<Product> productVector = null;
+		
 		JLabel productLabel = new JLabel("Product ");
-		String [] productStringArray = {"All bugs", "Sample Product 1", "Sample Product 2"};
-		JComboBox<String> productList = new JComboBox<String>(productStringArray);		
+		try{
+			productVector = productController.browseAllProducts();
+		}catch(FileNotFoundException fnf){
+			JOptionPane err = new JOptionPane("Problem getting the products from the database.", JOptionPane.ERROR_MESSAGE);
+		}catch(IOException ioe){
+			JOptionPane err = new JOptionPane("Unexpected IOException occurred during product retrieval.", JOptionPane.ERROR_MESSAGE);
+		
+
+		JComboBox<Product> productList = new JComboBox<Product>(productVector);		
 		productList.setSelectedIndex(0);
 		
 		productList.addActionListener(new ActionListener(){ //Listener for determining selected product and listing related bugs
@@ -166,7 +176,7 @@ public class DeveloperWindow {
 		
 		tabbedPane.addTab("Browse Bugs", browseBugsPanel);
 	}
-	
+	}
 	
 	public static void main(String[] args){
 		DeveloperWindow developerWindow = new DeveloperWindow(new Employee("", "", ""));
