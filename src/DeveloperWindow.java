@@ -23,6 +23,8 @@ public class DeveloperWindow {
 	
 	//Developer window constructor
 	public DeveloperWindow(Employee devIn) {
+		developer = devIn;
+		bugController = new BugController();
 		developerFrame = new JFrame();
 		developerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		developerFrame.setTitle("Bug Tracking System - Developer Window");
@@ -36,7 +38,6 @@ public class DeveloperWindow {
 		
 		developerFrame.add(tabbedPane);
 		developerFrame.setVisible(true);
-		developer = devIn;
 	}
 	
 	//browse assignments screen
