@@ -57,7 +57,7 @@ public class DeveloperWindow {
 		
 		JRadioButton reportFixedButton = new JRadioButton("Report Fixed");
 		reportFixedButton.setSelected(true);
-		JRadioButton removeButton = new JRadioButton("Remove");
+		JRadioButton removeButton = new JRadioButton("Remove");	
 
 		ButtonGroup group = new ButtonGroup();
 		group.add(reportFixedButton);
@@ -67,7 +67,13 @@ public class DeveloperWindow {
 		
 		updateButton.addActionListener(new ActionListener(){ //Update bug status listener implemented with an anonymous inner class
 			public void actionPerformed(ActionEvent e){
-				System.out.println("test");
+				if (reportFixedButton.isSelected())
+				{
+					
+				} else if (removeButton.isSelected()) //delete
+				{
+					
+				}
 			}
 		});
 		
@@ -147,9 +153,9 @@ public class DeveloperWindow {
 	}
 	
 	
-	//public static void main(String[] args){
-	//	DeveloperWindow developerWindow = new DeveloperWindow();
-	//}
+	public static void main(String[] args){
+		DeveloperWindow developerWindow = new DeveloperWindow();
+	}
 	
 	
 }
