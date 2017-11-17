@@ -3,6 +3,7 @@
  * @author Victoria Lappas
  */
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -43,54 +44,71 @@ public class DeveloperWindow {
 	
 	//browse assignments screen
 	public void createBrowseAssignmentsScreen() {
-		JPanel browseAssignmentsPanel = new JPanel();
-		browseAssignmentsPanel.setLayout(null);
 		
-		JLabel assignmentLabel = new JLabel("Current Assigned Bugs ");
-		String [] assignmentStringArray = {"Assignment 1", "Assignment 2", "Assignment 3" };
-		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
-		Vector<Bug> bugVector = null;
-		
-		/*try{ //Try to display the assignments assigned to the logged in developer
-			bugVector = bugController.browseAssignedBugs(developer.getID());
-		}catch(FileNotFoundException fnf){
-			JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
-		}catch(IOException ioe){
-			JOptionPane err = new JOptionPane("Unexpected IOException occurred during bug retrieval.", JOptionPane.ERROR_MESSAGE);
-		}*/
-		
-		if(bugVector != null){
-			for(int i = 0; i < bugVector.size(); i++) {
-				listModel.addElement(bugVector.get(i));
+			JPanel browseAssignmentsPanel = new JPanel();
+			browseAssignmentsPanel.setLayout(null);
+			
+			JLabel assignmentLabel = new JLabel("Current Assigned Bugs ");
+			DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
+			Vector<Bug> bugVector = null;
+			
+			 //Try to add the assignments to the list
+			try{
+				bugVector = bugController.browseAssignedBugs(developer.getID());
+			}catch (FileNotFoundException fnf){
+				JOptionPane err = new JOptionPane("File not found in the database.", JOptionPane.ERROR_MESSAGE);
+			}catch (IOException ioe){
+				JOptionPane err = new JOptionPane("Unexpected IOException thrown.", JOptionPane.ERROR_MESSAGE);
 			}
-		}
-		
-		JList<Bug> assignmentList = new JList<Bug>(listModel);
-		assignmentList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		assignmentList.setLayoutOrientation(JList.VERTICAL);
-		JScrollPane assignmentListScroller = new JScrollPane(assignmentList);
-		
-		JRadioButton reportFixedButton = new JRadioButton("Report Fixed");
-		reportFixedButton.setSelected(true);
-		JRadioButton removeButton = new JRadioButton("Remove");	
 
-		ButtonGroup group = new ButtonGroup();
-		group.add(reportFixedButton);
-		group.add(removeButton);
-		
-		JButton updateButton = new JButton("Update Bug Status");
-		
-		updateButton.addActionListener(new ActionListener(){ //Update bug status listener implemented with an anonymous inner class
-			public void actionPerformed(ActionEvent e){
-				if (reportFixedButton.isSelected())
-				{
-					//bugController.updateBugState(,"Fixed");
-				} else if (removeButton.isSelected()) //delete
-				{
-					
+			
+			if(bugVector != null)
+			{
+				for(int i = 0; i < bugVector.size(); i++) {
+					listModel.addElement(bugVector.get(i));
 				}
 			}
-		});
+			
+			JList<Bug> assignmentList = new JList<Bug>(listModel);
+			assignmentList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			assignmentList.setLayoutOrientation(JList.VERTICAL);
+			JScrollPane assignmentListScroller = new JScrollPane(assignmentList);
+			
+			JRadioButton reportFixedButton = new JRadioButton("Report Fixed");
+			reportFixedButton.setSelected(true);
+			JRadioButton removeButton = new JRadioButton("Remove");	
+
+			ButtonGroup group = new ButtonGroup();
+			group.add(reportFixedButton);
+			group.add(removeButton);
+			
+			JButton updateButton = new JButton("Update Bug Status");
+			
+			updateButton.addActionListener(new ActionListener(){ //Update bug status listener implemented with an anonymous inner class
+				public void actionPerformed(ActionEvent e){
+					if (reportFixedButton.isSelected()) //report fixed
+					{
+						try {
+							bugController.updateBugState(assignmentList.getSelectedValue().getID(),"Fixed");
+						} catch (FileNotFoundException e1) {
+							JOptionPane err = new JOptionPane("Couldn't find the file to write to.", JOptionPane.ERROR_MESSAGE);
+						} catch (IOException e1) {
+							JOptionPane err = new JOptionPane("Unexpected IOException occurred.", JOptionPane.ERROR_MESSAGE);
+						}
+					} else if (removeButton.isSelected()) //delete
+					{
+						try {
+							bugController.removeBug(assignmentList.getSelectedValue().getID());
+						} catch (FileNotFoundException e1) {
+							JOptionPane err = new JOptionPane("Couldn't find the bug file to remove from.", JOptionPane.ERROR_MESSAGE);
+						} catch (IOException e1) {
+							JOptionPane err = new JOptionPane("Unexpected IOException occurred.", JOptionPane.ERROR_MESSAGE);
+						}	
+					}
+				}
+			});
+		
+		
 		
 		assignmentLabel.setBounds(80,20,150,30);
 		assignmentListScroller.setBounds(80,60,400,200);
@@ -106,6 +124,7 @@ public class DeveloperWindow {
 		
 		tabbedPane.addTab("Browse Assignments", browseAssignmentsPanel);
 		
+		
 	}
 	
 	//browse all bugs screen
@@ -113,6 +132,12 @@ public class DeveloperWindow {
 		try{
 			JPanel browseBugsPanel = new JPanel();
 			browseBugsPanel.setLayout(null);
+			
+			
+			
+			
+
+			
 			
 			JLabel productLabel = new JLabel("Product ");
 			
