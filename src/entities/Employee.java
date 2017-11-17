@@ -60,6 +60,15 @@ public class Employee
     	return password;
     }
     
+    /**
+     * 
+     * @return the ID number of this employee
+     */
+    public int getID()
+    {
+    	return employee_id;
+    }
+    
     @Override
     //This method allows for nice formatting in the gui
   	//@return - A String representation of 'this' Product

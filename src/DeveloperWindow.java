@@ -6,12 +6,12 @@
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
 
 import controllers.*;
-import entities.Bug;
-import entities.Product;
+import entities.*;
 
 import javax.swing.*;
 
@@ -19,6 +19,7 @@ public class DeveloperWindow {
 	private JFrame developerFrame;
 	private JTabbedPane tabbedPane;
 	private BugController bugController;
+	private Employee developer;
 	
 	//Developer window constructor
 	public DeveloperWindow() {
@@ -44,13 +45,25 @@ public class DeveloperWindow {
 		
 		JLabel assignmentLabel = new JLabel("Current Assigned Bugs ");
 		String [] assignmentStringArray = {"Assignment 1", "Assignment 2", "Assignment 3", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", "249025", "23859", };
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
+		Vector<Bug> bugVector = null;
 		
-		for(int i = 0; i < assignmentStringArray.length; i++) {
-			listModel.addElement(assignmentStringArray[i]);
+		try{ //Try to display the assignments assigned to the logged in developer
+			bugVector = bugController.browseAssignedBugs(developer.getID());
+		}catch(FileNotFoundException fnf){
+			JOptionPane err = new JOptionPane("Problem getting the bugs from the database.", JOptionPane.ERROR_MESSAGE);
+		}catch(IOException ioe){
+			JOptionPane err = new JOptionPane("Unexpected IOException occurred.", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		JList<String> assignmentList = new JList<String>(listModel);
+		if(bugVector != null)
+		{
+			for(int i = 0; i < bugVector.size(); i++) {
+				listModel.addElement(bugVector.get(i));
+			}
+		}
+		
+		JList<Bug> assignmentList = new JList<Bug>(listModel);
 		assignmentList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		assignmentList.setLayoutOrientation(JList.VERTICAL);
 		JScrollPane assignmentListScroller = new JScrollPane(assignmentList);
@@ -69,7 +82,7 @@ public class DeveloperWindow {
 			public void actionPerformed(ActionEvent e){
 				if (reportFixedButton.isSelected())
 				{
-					
+					//bugController.updateBugState(,"Fixed");
 				} else if (removeButton.isSelected()) //delete
 				{
 					

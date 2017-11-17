@@ -143,7 +143,7 @@ public class BugController
 	//@return - null if no bugs found, or a Vector containing all of the bugs assigned to the developer with developer ID equal to developer_id
 	//@throws FileNotFoundException - if the database pathname could not be found
 	//@throws IOException - if an IO error occurs while reading from the database
-	Vector<Bug> browseAssignedBugs(int developer_id) throws FileNotFoundException, IOException
+	public Vector<Bug> browseAssignedBugs(int developer_id) throws FileNotFoundException, IOException
 	{
 		Vector<Bug> toReturn = new Vector<Bug>();
 		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentBugs.txt"));
@@ -178,7 +178,7 @@ public class BugController
 	//@return - false if bug with ID bug_id not found in database, otherwise true
 	//@throws FileNotFoundException - if the database pathname could not be found
 	//@throws IOException - if an IO error occurs while reading from the database
-	boolean assignDeveloper(int bug_id, int developer_id) throws FileNotFoundException, IOException
+	public boolean assignDeveloper(int bug_id, int developer_id) throws FileNotFoundException, IOException
 	{
 		boolean found = false;
 		File currentBugs = new File("data/CurrentBugs.txt");
