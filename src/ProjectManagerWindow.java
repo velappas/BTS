@@ -5,15 +5,27 @@
 
 import javax.swing.*;
 
-import entities.Employee;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Vector;
+
+import entities.*;
+import controllers.*;
 
 public class ProjectManagerWindow {
 	private JFrame PMFrame;
 	private JTabbedPane tabbedPane;
 	private Employee pm;
+	private EmployeeController employeeController;
+	private BugController bugController;
 	
 	//Project manager window constructor
 	public ProjectManagerWindow(Employee pmIn) {
+		employeeController = new EmployeeController();
+		bugController = new BugController();
 		PMFrame = new JFrame();
 		PMFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		PMFrame.setTitle("Bug Tracking System - Project Manager Window");
@@ -121,69 +133,183 @@ public class ProjectManagerWindow {
 	
 	//creates the modify employee screen
 	public void createModifyEmployeeScreen(){
-		JPanel modifyEmployeePanel = new JPanel();
-		modifyEmployeePanel.setLayout(null);
+			JPanel modifyEmployeePanel = new JPanel();
+			modifyEmployeePanel.setLayout(null);
 		
-		JLabel employeeListLabel = new JLabel("Employee List ");
-		String [] employeeArray = {"Employee 1", "Employee 2", "Employee 3"};
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
+			JLabel employeeListLabel = new JLabel("Employee List ");
+
+			JList<Employee> employeeList = new JList<Employee>(updateEmployeeList());
+			employeeList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			employeeList.setLayoutOrientation(JList.VERTICAL);
+			JScrollPane employeeListScroller = new JScrollPane(employeeList);			
+			
 		
-		for(int i = 0; i < employeeArray.length; i++) {
-			listModel.addElement(employeeArray[i]);
-		}
+			JLabel employeeNameLabel = new JLabel("Employee Name:");	
+			JTextField employeeNameField = new JTextField();
 		
-		JList<String> employeeList = new JList<String>(listModel);
-		employeeList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		employeeList.setLayoutOrientation(JList.VERTICAL);
-		JScrollPane employeeListScroller = new JScrollPane(employeeList);
+			JLabel employeePasswordLabel = new JLabel("Employee Password:");	
+			JTextField employeePasswordField = new JTextField();
 		
-		JLabel employeeNameLabel = new JLabel("Employee Name:");	
-		JTextField employeeNameField = new JTextField();
+			JLabel employeeTypeLabel = new JLabel("Employee Type: ");	
+			JRadioButton developerButton = new JRadioButton("Developer");
+			developerButton.setSelected(true);
+			JRadioButton projectManagerButton = new JRadioButton("Project Manager");
+			ButtonGroup group = new ButtonGroup();
+			group.add(developerButton);
+			group.add(projectManagerButton);
 		
-		JLabel employeePasswordLabel = new JLabel("Employee Password:");	
-		JTextField employeePasswordField = new JTextField();
+			//remove employee
+			JButton removeEmployeeButton = new JButton("Remove Employee");
+			removeEmployeeButton.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						try {
+							Employee temp = employeeList.getSelectedValue();
+							if(temp == null) {
+								JOptionPane.showMessageDialog(PMFrame, "Please select an employee for removal");
+							}
+							else {
+									employeeController.removeEmployee(temp.getID());
+									employeeList.setModel(updateEmployeeList());
+							}
+							
+						}
+						catch(IOException o) {
+							JOptionPane.showMessageDialog(PMFrame, "Issue with removal in the database");
+						}
+					}
+				
+				
+				});
+			
+			//add employee
+			JButton addEmployeeButton = new JButton("Add Employee");
+			addEmployeeButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						String name = employeeNameField.getText();
+						String password = employeePasswordField.getText();
+						String type = "developer";
+						if(projectManagerButton.isSelected()) {
+							type = "project manager";
+						}
+						
+						if(employeeNameField.getText().equals("")){
+							JOptionPane.showMessageDialog(PMFrame, "Please enter an employee name");
+						}
+						else if(employeePasswordField.getText().equals("")) {
+							JOptionPane.showMessageDialog(PMFrame, "Please enter a password for the employee");
+						}
+						else {
+							employeeController.createEmployee(name,password, type);
+							employeeList.setModel(updateEmployeeList());
+						}
+						
+					}
+					catch(IOException o) {
+						JOptionPane.showMessageDialog(PMFrame, "Issue with adding into the database");
+					}
+				}
+			});
 		
-		JLabel employeeTypeLabel = new JLabel("Employee Type: ");	
-		JRadioButton developerButton = new JRadioButton("Developer");
-		developerButton.setSelected(true);
-		JRadioButton projectManagerButton = new JRadioButton("Project Manager");
-		ButtonGroup group = new ButtonGroup();
-		group.add(developerButton);
-		group.add(projectManagerButton);
+			
+			//update employee information
+			JButton updateEmployeeButton = new JButton("Update Employee");
+			updateEmployeeButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						Employee temp = employeeList.getSelectedValue();
+						if(temp == null) {
+							JOptionPane.showMessageDialog(PMFrame, "Please select an employee to update");
+						}
+						else {
+								int ID = temp.getID();
+								String currentType = temp.getEmployeeType();
+								employeeList.setModel(updateEmployeeList());
+								if(!employeeNameField.getText().equals("") && !employeePasswordField.getText().equals("")) {
+									employeeController.updateEmployeeNameAndPass(ID, employeeNameField.getText(), employeePasswordField.getText());
+								}
+								else if(!employeeNameField.getText().equals("") && employeePasswordField.getText().equals("")) {
+									JOptionPane.showMessageDialog(PMFrame, "Please also create a new password");
+								}
+								else if(employeeNameField.getText().equals("") && !employeePasswordField.getText().equals("")) { 
+									JOptionPane.showMessageDialog(PMFrame, "Please also change the name");
+								}
+								
+								
+								String newType = "developer";
+								if(projectManagerButton.isSelected()) {
+									newType = "project manager";
+								}
+								
+								if(newType != currentType) {
+									employeeController.updateEmployeeType(ID, newType);
+								}
+								
+								
+								employeeList.setModel(updateEmployeeList());
+								
+						}
+					}
+					catch(IOException o) {
+						JOptionPane.showMessageDialog(PMFrame, "Issue with updating the database");
+					}
+				}
+			});
+			
 		
-		JButton removeEmployeeButton = new JButton("Remove Employee");
-		JButton addEmployeeButton = new JButton("Add Employee");
-		JButton updateEmployeeButton = new JButton("Update Employee");
+			employeeListLabel.setBounds(80,20,150,30);
+			employeeListScroller.setBounds(80,60,400,150);
+			removeEmployeeButton.setBounds(340,20,150,30);
+			employeeNameLabel.setBounds(80,210,150,30);
+			employeeNameField.setBounds(210,210,175,30);
+			employeePasswordLabel.setBounds(80,245,150,30);
+			employeePasswordField.setBounds(210,245,175,30);
+			employeeTypeLabel.setBounds(80,280,150,30);
+			developerButton.setBounds(200,280,100,30);
+			projectManagerButton.setBounds(300,280,150,30);
+			updateEmployeeButton.setBounds(100,320,150,30);
+			addEmployeeButton.setBounds(250,320,150,30);
 		
-		employeeListLabel.setBounds(80,20,150,30);
-		employeeListScroller.setBounds(80,60,400,150);
-		removeEmployeeButton.setBounds(340,20,150,30);
-		employeeNameLabel.setBounds(80,210,150,30);
-		employeeNameField.setBounds(210,210,175,30);
-		employeePasswordLabel.setBounds(80,245,150,30);
-		employeePasswordField.setBounds(210,245,175,30);
-		employeeTypeLabel.setBounds(80,280,150,30);
-		developerButton.setBounds(200,280,100,30);
-		projectManagerButton.setBounds(300,280,150,30);
-		updateEmployeeButton.setBounds(100,320,150,30);
-		addEmployeeButton.setBounds(250,320,150,30);
+			modifyEmployeePanel.add(employeeListLabel);
+			modifyEmployeePanel.add(employeeListScroller);
+			modifyEmployeePanel.add(removeEmployeeButton);
+			modifyEmployeePanel.add(addEmployeeButton);
+			modifyEmployeePanel.add(updateEmployeeButton);
+			modifyEmployeePanel.add(employeeNameLabel);
+			modifyEmployeePanel.add(employeeNameField);
+			modifyEmployeePanel.add(employeePasswordLabel);
+			modifyEmployeePanel.add(employeePasswordField);
+			modifyEmployeePanel.add(employeeTypeLabel);
+			modifyEmployeePanel.add(developerButton);
+			modifyEmployeePanel.add(projectManagerButton);
 		
-		modifyEmployeePanel.add(employeeListLabel);
-		modifyEmployeePanel.add(employeeListScroller);
-		modifyEmployeePanel.add(removeEmployeeButton);
-		modifyEmployeePanel.add(addEmployeeButton);
-		modifyEmployeePanel.add(updateEmployeeButton);
-		modifyEmployeePanel.add(employeeNameLabel);
-		modifyEmployeePanel.add(employeeNameField);
-		modifyEmployeePanel.add(employeePasswordLabel);
-		modifyEmployeePanel.add(employeePasswordField);
-		modifyEmployeePanel.add(employeeTypeLabel);
-		modifyEmployeePanel.add(developerButton);
-		modifyEmployeePanel.add(projectManagerButton);
-		
-		tabbedPane.addTab("Modify Employees", modifyEmployeePanel);
-		
+			tabbedPane.addTab("Modify Employees", modifyEmployeePanel);
 	}
+	
+	
+	//returns a list model for the employee list when called
+	DefaultListModel<Employee> updateEmployeeList(){
+		DefaultListModel<Employee> listModel = new DefaultListModel<Employee>();
+		try {
+			Vector<Employee> employeeVector = employeeController.getAllEmployees();
+	
+			if(employeeVector != null) {
+				for(int i = 0; i < employeeVector.size(); i++) {
+					listModel.addElement(employeeVector.get(i));
+				}
+			
+			}
+		}
+		catch(IOException e) {
+			JOptionPane err = new JOptionPane("Issue reading from database", JOptionPane.ERROR_MESSAGE);
+		}
+		return listModel;
+	}
+	
+	
 	
 	// creates the generate report screen
 	void createGenerateReportScreen() {
@@ -192,7 +318,30 @@ public class ProjectManagerWindow {
 		
 		JLabel generateReportLabel1 = new JLabel("Generate a report for all bugs and their current status");
 		JLabel generateReportLabel2 = new JLabel("This report will appear in your current working directory");
+		
 		JButton generateReportButton = new JButton("Generate Report");
+		generateReportButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {									
+					File file = new File("Report.txt");
+					FileWriter writer = new FileWriter(file);
+					writer.write("Current Bugs Report \n ");
+					Vector<Bug> bugList = bugController.browseAllBugs();
+					for(int i = 0; i < bugList.size(); i++) {
+						writer.write(bugList.get(i).toString());
+						writer.write("\n");
+					}
+					JOptionPane.showMessageDialog(PMFrame, "Report successfully generated");
+					writer.close();
+					}
+				catch(IOException o) {
+					JOptionPane.showMessageDialog(PMFrame, "Issue with adding into the database");
+				}
+				finally {
+				}
+			}
+		});
 		
 		generateReportLabel1.setBounds(90,50,350,30);
 		generateReportLabel2.setBounds(90,80,400,30);
@@ -203,10 +352,9 @@ public class ProjectManagerWindow {
 		generateReportPanel.add(generateReportButton);
 		
 		tabbedPane.addTab("Generate Report", generateReportPanel);
-		
-		
 	}
 	
+
 	
 	public static void main(String[] args){
 		ProjectManagerWindow PMWindow = new ProjectManagerWindow(new Employee("", "", ""));
