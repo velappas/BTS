@@ -83,6 +83,7 @@ public class EmployeeController
 		BufferedReader fr = new BufferedReader(new FileReader("data/CurrentEmployees.txt"));
 		
 		Vector<Employee> toReturn = new Vector<Employee>();
+		
 		while(true)
 		{
 			String temp = fr.readLine();

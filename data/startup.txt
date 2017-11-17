@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 4, 2, 14
+=======
+4, 1, 7
+>>>>>>> branch 'master' of https://github.com/velappas/BTS.git

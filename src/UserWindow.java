@@ -3,6 +3,7 @@
  * @author Victoria Lappas
  */
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentListener;
@@ -11,32 +12,21 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-import controllers.*;
-import entities.*;
+import controllers.BugController;
+import controllers.ProductController;
+import entities.Bug;
+import entities.Product;
 
 public class UserWindow{
 	private JFrame userFrame;
 	private JTabbedPane tabbedPane;
 	private BugController bugC;
 	private ProductController prodC;
-	private EmployeeController emC;
 
 	public UserWindow()
 	{
 		bugC = new BugController();
-		prodC = new ProductController();	//Initialize system controllers
-		emC = new EmployeeController();
-		
-		try
-		{
-			Bug.setIDCount();		//Set startup information so the system remembers how many ID's
-			Product.setIDCount();	//are allocated.
-			Employee.setIDCount();
-		}
-		catch(IOException a)
-		{
-			JOptionPane.showMessageDialog(userFrame, "Error reading startup information from the test file. Please restart the program and try again.");
-		}
+		prodC = new ProductController();
 		
 		//build user window using gui components
 		userFrame = new JFrame();
@@ -83,7 +73,6 @@ public class UserWindow{
 			JList<Bug> bugList = new JList<Bug>(listModel);
 			
 			productList.addActionListener(new ActionListener(){
-				@Override
 				public void actionPerformed(ActionEvent a)
 				{
 					try
@@ -91,7 +80,6 @@ public class UserWindow{
 						Vector<Bug> temp = bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID());
 						if(temp != null)
 							bugList.setListData(bugC.browseProductBugs(((Product)productList.getSelectedItem()).getProductID()));
-						
 						else
 							bugList.setListData(new Vector<Bug>()); //Just put in an empty vector
 					}
@@ -130,67 +118,33 @@ public class UserWindow{
 	
 	//submit bug screen
 	public void createSubmitBugScreen() {
-		try
-		{
-			JPanel submitBugPanel = new JPanel();
-			submitBugPanel.setLayout(null);
+		JPanel submitBugPanel = new JPanel();
+		submitBugPanel.setLayout(null);
 
-			JLabel description = new JLabel("Description: ");
-			JTextField descriptionField = new JTextField(60);
+		JLabel description = new JLabel("Description: ");
+		JTextField descriptionField = new JTextField(60);
 		
-			JLabel productName = new JLabel("Product Name: ");
-			Vector<Product> productVector= prodC.browseAllProducts();
-			JComboBox<Product> productList = new JComboBox<Product>(productVector);
-			productList.setSelectedIndex(0);
+		JLabel productName = new JLabel("Product Name: ");
+		String [] productStringArray = {"Sample Product 1", "Sample Product 2"};
+		JComboBox<String> productList = new JComboBox<String>(productStringArray);
+		productList.setSelectedIndex(0);
 		
-			JButton submitButton = new JButton("Submit");
-			submitButton.addActionListener(new ActionListener()
-					{
-						@Override
-						public void actionPerformed(ActionEvent e) 
-						{
-							try
-							{
-								String temp = descriptionField.getText();
-								if(temp.contains(", "))
-								{
-									JOptionPane.showMessageDialog(userFrame, "Please do not use commas in your description.");
-								}
-								else if(temp.isEmpty())
-								{
-									JOptionPane.showMessageDialog(userFrame, "Please enter a description.");
-								}
-								else
-									bugC.submitBug(temp, ((Product)productList.getSelectedItem()).getProductID());
-							}
-							catch(IOException a)
-							{
-								a.printStackTrace();
-							}
-						
-						}
-			
-					});
+		JButton submitButton = new JButton("Submit");
 		
-			description.setBounds(100,80,150,30);
-			descriptionField.setBounds(220,80,250,30);
-			productName.setBounds(100,130,150,30);
-			productList.setBounds(220,130,250,30);
-			submitButton.setBounds(180,180,100,30);
+		description.setBounds(100,80,150,30);
+		descriptionField.setBounds(220,80,250,30);
+		productName.setBounds(100,130,150,30);
+		productList.setBounds(220,130,250,30);
+		submitButton.setBounds(180,180,100,30);
 		
-			submitBugPanel.add(description);
-			submitBugPanel.add(descriptionField);
-			submitBugPanel.add(productName);
-			submitBugPanel.add(productList);
-			submitBugPanel.add(submitButton);
+		submitBugPanel.add(description);
+		submitBugPanel.add(descriptionField);
+		submitBugPanel.add(productName);
+		submitBugPanel.add(productList);
+		submitBugPanel.add(submitButton);
 		
-			tabbedPane.addTab("Submit Bug", submitBugPanel);
+		tabbedPane.addTab("Submit Bug", submitBugPanel);
 		
-		}
-		catch(IOException a)
-		{
-			JOptionPane.showMessageDialog(userFrame, "Issue reading from the database. Please try again.");
-		}
 	}
 	
 	
@@ -214,58 +168,6 @@ public class UserWindow{
 		ButtonGroup group = new ButtonGroup();
 		group.add(developerButton);
 		group.add(projectManagerButton);
-		
-		loginButton.addActionListener(new ActionListener()
-				{
-					@SuppressWarnings("deprecation")
-					@Override
-					public void actionPerformed(ActionEvent e) 
-					{
-						try
-						{
-							Vector<Employee> temp = emC.getAllEmployees();
-							Employee tempE = null;
-							for(int i = 0; i < temp.size(); i++)
-								if(temp.get(i).getName().equals(userNameField.getText()) && temp.get(i).getPassword().equals(passwordField.getText()))
-									tempE = temp.get(i);
-							
-							if(tempE == null)
-							{
-								JOptionPane.showMessageDialog(userFrame, "The information you entered does not match any employee information in our database. Please ensure you've entered the correct information.");
-								return;
-							}
-							if(developerButton.isSelected())
-							{
-								if(tempE.getEmployeeType().equalsIgnoreCase("developer"))
-								{
-									DeveloperWindow devWindow = new DeveloperWindow(tempE);
-								}
-								else
-								{
-									JOptionPane.showMessageDialog(userFrame, "Your information was found in the database, but you are not registered as a developer. Please select another login type.");
-									return;
-								}
-							}
-							else if(projectManagerButton.isSelected())
-							{
-								if(tempE.getEmployeeType().equalsIgnoreCase("project manager"))
-								{
-									ProjectManagerWindow manWindow = new ProjectManagerWindow(tempE);
-								}
-								else
-								{
-									JOptionPane.showMessageDialog(userFrame, "Your information was found in the database, but you are not registered as a project manager. Please select another login type.");
-									return;
-								}
-							}
-						
-						}
-						catch(IOException a)
-						{
-							JOptionPane.showMessageDialog(userFrame, "Issue reading from the database. Please try again.");
-						}
-					}
-				});
 		
 		userNameField.setBounds(220,70,150,30);
 		passwordField.setBounds(220,116,150,30);
