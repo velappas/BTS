@@ -354,11 +354,5 @@ public class ProjectManagerWindow {
 		tabbedPane.addTab("Generate Report", generateReportPanel);
 	}
 	
-
-	
-	public static void main(String[] args){
-		ProjectManagerWindow PMWindow = new ProjectManagerWindow(new Employee("", "", ""));
-	}
-	
 	
 }
