@@ -116,34 +116,46 @@ public class DeveloperWindow {
 			JPanel browseBugsPanel = new JPanel();
 			browseBugsPanel.setLayout(null);
 			
-			JLabel browseBugsLabel = new JLabel("Browse Bugs ");
-			
-			//TODO get list of bugs from the database
-			DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
 			
 			
-			JList<Bug> bugList = new JList<Bug>(listModel);
-			bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-			bugList.setLayoutOrientation(JList.VERTICAL);
-			JScrollPane bugListScroller = new JScrollPane(bugList);
+			
+
 			
 			
 			JLabel productLabel = new JLabel("Product ");
 			
-			Vector<Product> productVector = null;
-			productVector = productController.browseAllProducts();
+			Vector<Product> moddedProductVector = new Vector<Product>();
+			moddedProductVector.add(new Product("All bugs"));
+			Vector<Product> productVector = productController.browseAllProducts();
+			JComboBox<Product> productList = new JComboBox<Product>(moddedProductVector);		
 			
-			
-		
-			JComboBox<Product> productList = new JComboBox<Product>(productVector);		
+			for (int i = 0; i < productVector.size(); i++) //add the products to the list with "all bugs" as the first option
+			{
+				moddedProductVector.add(productVector.elementAt(i));
+			}
 			productList.setSelectedIndex(0);
+			
+			JLabel browseBugsLabel = new JLabel("Browse Bugs ");
+			
+			Vector<Bug> bugVector = bugController.browseAllBugs(); //show all the bugs initially
+			
+			DefaultListModel<Bug> listModel = new DefaultListModel<Bug>();
+			
+			if(bugVector != null)
+			{
+				for(int i = 0; i < bugVector.size(); i++) {
+					listModel.addElement(bugVector.get(i));
+				}
+			}
+			
+			JList<Bug> bugList = new JList<Bug>(listModel);
 			
 			productList.addActionListener(new ActionListener(){ //Listener for determining selected product and listing related bugs
 				public void actionPerformed(ActionEvent e) {
 					JComboBox<String> combo = (JComboBox<String>) e.getSource(); //establish a reference to the JComboBox, "this" can't be used in anonymous inner classes
-			        String selectedProduct = (String) combo.getSelectedItem();
+			        String selectedProduct = combo.getSelectedItem().toString();
 			        try {
-			        	if(selectedProduct.equals("All bugs"))
+			        	if(productList.getSelectedIndex() == 0)
 			        	{
 				        	Vector<Bug> temp = bugController.browseAllBugs();
 				        	bugList.setListData(temp);
@@ -162,6 +174,9 @@ public class DeveloperWindow {
 				}	
 			});
 			
+			bugList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+			bugList.setLayoutOrientation(JList.VERTICAL);
+			JScrollPane bugListScroller = new JScrollPane(bugList);
 			
 			browseBugsLabel.setBounds(80,20,150,30);
 			bugListScroller.setBounds(80,60,400,200);
