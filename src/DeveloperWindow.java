@@ -22,7 +22,9 @@ public class DeveloperWindow {
 	private Employee developer;
 	
 	//Developer window constructor
-	public DeveloperWindow() {
+	public DeveloperWindow(Employee devIn) {
+		developer = devIn;
+		bugController = new BugController();
 		developerFrame = new JFrame();
 		developerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		developerFrame.setTitle("Bug Tracking System - Developer Window");
@@ -167,7 +169,7 @@ public class DeveloperWindow {
 	
 	
 	public static void main(String[] args){
-		DeveloperWindow developerWindow = new DeveloperWindow();
+		DeveloperWindow developerWindow = new DeveloperWindow(new Employee("", "", ""));
 	}
 	
 	

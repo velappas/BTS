@@ -11,21 +11,21 @@ import java.util.Vector;
 
 import javax.swing.*;
 
-import controllers.BugController;
-import controllers.ProductController;
-import entities.Bug;
-import entities.Product;
+import controllers.*;
+import entities.*;
 
 public class UserWindow{
 	private JFrame userFrame;
 	private JTabbedPane tabbedPane;
 	private BugController bugC;
 	private ProductController prodC;
+	private EmployeeController emC;
 
 	public UserWindow()
 	{
 		bugC = new BugController();
 		prodC = new ProductController();
+		emC = new EmployeeController();
 		
 		//build user window using gui components
 		userFrame = new JFrame();
@@ -178,8 +178,7 @@ public class UserWindow{
 		}
 		catch(IOException a)
 		{
-			JOptionPane err = new JOptionPane("Issue reading from database.", JOptionPane.ERROR_MESSAGE);
-			err.setVisible(true);
+			JOptionPane.showMessageDialog(userFrame, "Issue reading from the database. Please try again.");
 		}
 	}
 	
@@ -204,6 +203,58 @@ public class UserWindow{
 		ButtonGroup group = new ButtonGroup();
 		group.add(developerButton);
 		group.add(projectManagerButton);
+		
+		loginButton.addActionListener(new ActionListener()
+				{
+					@SuppressWarnings("deprecation")
+					@Override
+					public void actionPerformed(ActionEvent e) 
+					{
+						try
+						{
+							Vector<Employee> temp = emC.getAllEmployees();
+							Employee tempE = null;
+							for(int i = 0; i < temp.size(); i++)
+								if(temp.get(i).getName().equals(userNameField.getText()) && temp.get(i).getPassword().equals(passwordField.getText()))
+									tempE = temp.get(i);
+							
+							if(tempE == null)
+							{
+								JOptionPane.showMessageDialog(userFrame, "The information you entered does not match any employee information in our database. Please ensure you've entered the correct information.");
+								return;
+							}
+							if(developerButton.isSelected())
+							{
+								if(tempE.getEmployeeType().equalsIgnoreCase("developer"))
+								{
+									DeveloperWindow devWindow = new DeveloperWindow(tempE);
+								}
+								else
+								{
+									JOptionPane.showMessageDialog(userFrame, "Your information was found in the database, but you are not registered as a developer. Please select another login type.");
+									return;
+								}
+							}
+							else if(projectManagerButton.isSelected())
+							{
+								if(tempE.getEmployeeType().equalsIgnoreCase("project manager"))
+								{
+									ProjectManagerWindow manWindow = new ProjectManagerWindow(tempE);
+								}
+								else
+								{
+									JOptionPane.showMessageDialog(userFrame, "Your information was found in the database, but you are not registered as a project manager. Please select another login type.");
+									return;
+								}
+							}
+						
+						}
+						catch(IOException a)
+						{
+							JOptionPane.showMessageDialog(userFrame, "Issue reading from the database. Please try again.");
+						}
+					}
+				});
 		
 		userNameField.setBounds(220,70,150,30);
 		passwordField.setBounds(220,116,150,30);
