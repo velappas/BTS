@@ -7,6 +7,13 @@
 
 package entities;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Product 
 {
 	private int product_id; 
@@ -19,6 +26,23 @@ public class Product
    	{
    		name = namein;
    		product_id = IDCount++;
+   		try
+   		{
+   			File file = new File("data/startup.txt");
+   			BufferedReader f = new BufferedReader(new FileReader(file));
+   			String startupinfo = f.readLine();
+   			int id0 = Integer.parseInt(startupinfo.split(", ")[0]);
+   			int id1 = Integer.parseInt(startupinfo.split(", ")[1]);
+   			f.close();
+   			
+   			BufferedWriter fo = new BufferedWriter(new FileWriter(file, false));	//Make sure to write at beginning of file
+   			fo.write(id0 + ", " + id1 + ", " + IDCount);
+   			fo.close();
+   		}
+   		catch(IOException a)
+   		{
+   			a.printStackTrace();
+   		}
    	}
    	
    	//Constructor for a Product to simplify "database" access
@@ -56,5 +80,15 @@ public class Product
 	public String toStringDatabase()
 	{
 		return product_id + ", " + name;
+	}
+	
+	 //Allows IDCount to be set each time the system is booted
+  	//@throws IOException - if an issue occurs when reading from the startup file
+    public static void setIDCount() throws IOException
+	{
+		BufferedReader f = new BufferedReader(new FileReader("data/startup.txt"));
+		String startupinfo = f.readLine();
+		IDCount = Integer.parseInt(startupinfo.split(", ")[2]);
+		f.close();
 	}
 }

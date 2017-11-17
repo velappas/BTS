@@ -7,6 +7,12 @@
 
 package entities;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 
 public class Bug 
@@ -30,6 +36,24 @@ public class Bug
 		status = "Submitted";	//Default status of a new bug
 		date_submitted = new Date();	//This constructor allocates a new date object initialized to the time it is allocated.
 		assigned_developer = -1;	//Set the developer ID to be a non-existent ID so that you can tell if the bug is assigned yet
+		
+		try
+   		{
+   			File file = new File("data/startup.txt");
+   			BufferedReader f = new BufferedReader(new FileReader(file));
+   			String startupinfo = f.readLine();
+   			int id1 = Integer.parseInt(startupinfo.split(", ")[1]);
+   			int id2 = Integer.parseInt(startupinfo.split(", ")[2]);
+   			f.close();
+   			
+   			BufferedWriter fo = new BufferedWriter(new FileWriter(file, false));	//Make sure to write at beginning of file
+   			fo.write(IDCount + ", " + id1 + ", " + id2);
+   			fo.close();
+   		}
+   		catch(IOException a)
+   		{
+   			a.printStackTrace();
+   		}
 	}
 	
 	//Constructor of a bug for reading out of the database
@@ -108,5 +132,15 @@ public class Bug
 	public String toStringDatabase()
 	{
 		return bugID + ", " + bug_description + ", " + productID + ", " + status + ", " + date_submitted + ", " + assigned_developer;
+	}
+	
+	//Allows IDCount to be set each time the system is booted
+	//@throws IOException - if an issue occurs when reading from the startup file
+	public static void setIDCount() throws IOException
+	{
+		BufferedReader f = new BufferedReader(new FileReader("data/startup.txt"));
+		String startupinfo = f.readLine();
+		IDCount = Integer.parseInt(startupinfo.split(", ")[0]);
+		f.close();
 	}
 }
